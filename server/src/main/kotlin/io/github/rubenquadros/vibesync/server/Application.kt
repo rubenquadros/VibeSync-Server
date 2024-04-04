@@ -1,7 +1,5 @@
 package io.github.rubenquadros.vibesync.server
 
-import io.github.rubenquadros.vibesync.server.plugins.configureRouting
-import io.github.rubenquadros.vibesync.server.plugins.configureSerialization
 import io.ktor.server.application.Application
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
@@ -12,6 +10,7 @@ fun main() {
 }
 
 fun Application.module() {
+    configureKoin()
     configureSerialization()
     configureRouting()
 }
