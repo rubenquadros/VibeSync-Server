@@ -1,3 +1,5 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 plugins {
     alias(libs.plugins.org.jetbrains.kotlin.jvm)
     alias(libs.plugins.ktor)
@@ -38,5 +40,9 @@ kotlin {
 }
 
 application {
-    mainClass.set("io.github.rubenquadros.server.Application.kt")
+    mainClass.set("io.github.rubenquadros.vibesync.server.ApplicationKt")
+}
+
+tasks.withType<ShadowJar>() {
+    mergeServiceFiles()
 }
