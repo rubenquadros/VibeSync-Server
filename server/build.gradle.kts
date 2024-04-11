@@ -25,6 +25,13 @@ dependencies {
 
     implementation(project(":firestore"))
     implementation(project(":kovibes"))
+
+    testImplementation(project(":testUtils"))
+    testImplementation(libs.ktor.client.content.negotiation)
+    testImplementation(libs.koin.test)
+    testImplementation(libs.kotlin.test)
+    testImplementation(libs.coroutines.test)
+    testImplementation(libs.mockk)
 }
 
 ksp {
@@ -34,6 +41,12 @@ ksp {
 
 tasks.test {
     useJUnitPlatform()
+    environment(
+        environmentVariables = arrayOf(
+            Pair("CLIENT_ID", "TestClientId"),
+            Pair("CLIENT_SECRET", "TestClientSecret")
+        )
+    )
 }
 kotlin {
     jvmToolchain(17)
@@ -43,6 +56,10 @@ application {
     mainClass.set("io.github.rubenquadros.vibesync.server.ApplicationKt")
 }
 
-tasks.withType<ShadowJar>() {
+tasks.withType<ShadowJar> {
     mergeServiceFiles()
+}
+
+configurations {
+    testImplementation.get().exclude("org.jetbrains.kotlin", "kotlin-test-junit")
 }
