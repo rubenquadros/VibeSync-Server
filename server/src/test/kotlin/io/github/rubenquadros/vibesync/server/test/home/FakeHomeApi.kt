@@ -3,8 +3,8 @@ package io.github.rubenquadros.vibesync.server.test.home
 import io.github.rubenquadros.vibesync.server.home.HomeApi
 import io.github.rubenquadros.vibesync.server.home.LandingPageResponse
 import io.github.rubenquadros.vibesync.server.home.toTopEntity
-import io.github.rubenquadros.vibesync.server.model.Error
 import io.github.rubenquadros.vibesync.server.model.Response
+import io.github.rubenquadros.vibesync.server.test.errorApiResponse
 import io.github.rubenquadros.vibesync.test.data.featuredPlaylistsResponse
 import io.github.rubenquadros.vibesync.test.data.topEntity
 import io.ktor.http.HttpStatusCode
@@ -17,10 +17,7 @@ class FakeHomeApi : HomeApi {
 
     override suspend fun getHomePage(): Response {
         return if (isError) {
-            Response(
-                status = HttpStatusCode.InternalServerError,
-                data = Error(message = "Something went wrong.")
-            )
+            errorApiResponse
         } else {
             Response(
                 status = HttpStatusCode.OK,

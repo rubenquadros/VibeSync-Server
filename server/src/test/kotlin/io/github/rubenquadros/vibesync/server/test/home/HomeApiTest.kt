@@ -22,7 +22,9 @@ class HomeApiTest {
     fun `when home page data is fetched successfully then a success response is received`() = runTest {
         FakeFirestoreApi.isError = false
         FakeSpotifyApi.isError = false
+
         val response = homeApi.getHomePage()
+
         response.assertSuccess<LandingPageResponse> {
             with(it) {
                 assert(topAlbums.size == 2)
@@ -38,7 +40,9 @@ class HomeApiTest {
     fun `when there is an error in fetching spotify data then an error response is received`() = runTest {
         FakeSpotifyApi.isError = true
         FakeFirestoreApi.isError = false
+
         val response = homeApi.getHomePage()
+
         response.assertSpotifyFailure()
     }
 
@@ -46,7 +50,9 @@ class HomeApiTest {
     fun `when there is n error in fetching firestore data then an error response is received`() = runTest {
         FakeFirestoreApi.isError = true
         FakeSpotifyApi.isError = false
+
         val response = homeApi.getHomePage()
+
         response.assertFirestoreFailure {
             assert(it.message == "Error in fetching top artists.")
         }

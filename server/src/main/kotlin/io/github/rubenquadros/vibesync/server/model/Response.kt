@@ -12,3 +12,8 @@ data class Response(
 data class Error(
     val message: String
 )
+
+fun getErrorResponse(message: String) = Response(
+    status = HttpStatusCode.InternalServerError,
+    data = Error(message = message)
+)

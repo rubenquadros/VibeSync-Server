@@ -8,6 +8,7 @@ import io.github.rubenquadros.vibesync.firestore.model.TopEntity
 import io.github.rubenquadros.vibesync.kovibes.SpotifyApi
 import io.github.rubenquadros.vibesync.server.model.Error
 import io.github.rubenquadros.vibesync.server.model.Response
+import io.github.rubenquadros.vibesync.server.model.getErrorResponse
 import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -38,10 +39,7 @@ class HomeApiImpl(
                 )
             }.awaitAll()
         }.getOrElse {
-            return Response(
-                status = HttpStatusCode.InternalServerError,
-                data = Error(message = it.message.toString())
-            )
+            return getErrorResponse(message = it.message.toString())
         }
 
         val featuredPlaylistsResponse: SpotifyApiResponse<Playlists, ErrorBody> = response[4] as SpotifyApiResponse<Playlists, ErrorBody>
