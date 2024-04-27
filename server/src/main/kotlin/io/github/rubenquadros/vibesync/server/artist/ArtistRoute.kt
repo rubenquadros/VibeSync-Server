@@ -18,4 +18,4 @@ fun Route.artistRoute() {
 }
 
 @Resource("/artist/{id}")
-data class Artist(val id: String)
+private data class Artist(val id: String)

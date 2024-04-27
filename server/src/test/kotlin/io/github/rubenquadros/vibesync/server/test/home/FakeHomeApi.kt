@@ -4,10 +4,11 @@ import io.github.rubenquadros.vibesync.server.home.HomeApi
 import io.github.rubenquadros.vibesync.server.home.LandingPageResponse
 import io.github.rubenquadros.vibesync.server.home.toTopEntity
 import io.github.rubenquadros.vibesync.server.model.Response
-import io.github.rubenquadros.vibesync.server.test.errorApiResponse
+import io.github.rubenquadros.vibesync.server.model.getServerErrorResponse
+import io.github.rubenquadros.vibesync.server.model.getSuccessResponse
+import io.github.rubenquadros.vibesync.server.test.errorMessage
 import io.github.rubenquadros.vibesync.test.data.featuredPlaylistsResponse
 import io.github.rubenquadros.vibesync.test.data.topEntity
-import io.ktor.http.HttpStatusCode
 
 class FakeHomeApi : HomeApi {
 
@@ -17,10 +18,9 @@ class FakeHomeApi : HomeApi {
 
     override suspend fun getHomePage(): Response {
         return if (isError) {
-            errorApiResponse
+            getServerErrorResponse(errorMessage)
         } else {
-            Response(
-                status = HttpStatusCode.OK,
+            getSuccessResponse(
                 data = LandingPageResponse(
                     topArtists = topEntity,
                     topAlbums = topEntity,

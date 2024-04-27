@@ -28,7 +28,7 @@ class ArtistRouteTest : KoinTest {
     }
 
     @Test
-    fun `when data is fetched successfully then a success response is received`() = testApplication {
+    fun `when artist data is fetched successfully then a success response is received`() = testApplication {
         FakeArtistApi.isError = false
 
         val response = it.get("artist/123")
@@ -46,7 +46,7 @@ class ArtistRouteTest : KoinTest {
     }
 
     @Test
-    fun `when there is error is data fetching from spotify then an error response is received`() = testApplication {
+    fun `when there is error in fetching artist data from spotify then an error response is received`() = testApplication {
         FakeArtistApi.isError = true
 
         val response = it.get("artist/123")

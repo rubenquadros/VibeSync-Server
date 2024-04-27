@@ -2,9 +2,8 @@ package io.github.rubenquadros.vibesync.server.util
 
 import io.github.rubenquadros.kovibes.api.response.ErrorBody
 import io.github.rubenquadros.kovibes.api.response.SpotifyApiResponse
-import io.github.rubenquadros.vibesync.server.model.Error
 import io.github.rubenquadros.vibesync.server.model.Response
-import io.ktor.http.HttpStatusCode
+import io.github.rubenquadros.vibesync.server.model.getErrorResponse
 
 fun List<SpotifyApiResponse<*, ErrorBody>>.toApiResponse(block: (successResults: List<Any>) -> Response): Response {
 
@@ -12,12 +11,7 @@ fun List<SpotifyApiResponse<*, ErrorBody>>.toApiResponse(block: (successResults:
 
     forEach { spotifyApiResponse: SpotifyApiResponse<*, ErrorBody> ->
         if (spotifyApiResponse is SpotifyApiResponse.Error) {
-            return with(spotifyApiResponse.body.error) {
-                Response(
-                    status = HttpStatusCode(status, message),
-                    data = Error(message = message)
-                )
-            }
+            return getErrorResponse(spotifyApiResponse.body)
         } else {
             successResults.add((spotifyApiResponse as SpotifyApiResponse.Success).result!!)
         }

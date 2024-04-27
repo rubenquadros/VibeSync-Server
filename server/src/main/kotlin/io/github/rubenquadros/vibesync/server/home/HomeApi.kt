@@ -6,10 +6,10 @@ import io.github.rubenquadros.kovibes.api.response.SpotifyApiResponse
 import io.github.rubenquadros.vibesync.firestore.FirestoreApi
 import io.github.rubenquadros.vibesync.firestore.model.TopEntity
 import io.github.rubenquadros.vibesync.kovibes.SpotifyApi
-import io.github.rubenquadros.vibesync.server.model.Error
 import io.github.rubenquadros.vibesync.server.model.Response
 import io.github.rubenquadros.vibesync.server.model.getErrorResponse
-import io.ktor.http.HttpStatusCode
+import io.github.rubenquadros.vibesync.server.model.getServerErrorResponse
+import io.github.rubenquadros.vibesync.server.model.getSuccessResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -39,23 +39,18 @@ class HomeApiImpl(
                 )
             }.awaitAll()
         }.getOrElse {
-            return getErrorResponse(message = it.message.toString())
+            return getServerErrorResponse(message = it.message.toString())
         }
 
         val featuredPlaylistsResponse: SpotifyApiResponse<Playlists, ErrorBody> = response[4] as SpotifyApiResponse<Playlists, ErrorBody>
 
         return if (featuredPlaylistsResponse is SpotifyApiResponse.Error) {
-            val error = featuredPlaylistsResponse.body.error
-            Response(
-                status = HttpStatusCode(error.status, error.message),
-                data = Error(message = error.message)
-            )
+            getErrorResponse(featuredPlaylistsResponse.body)
         } else {
             val recentTracksResponse = response[3] as List<TopEntity>
             val featuredPlaylists = (featuredPlaylistsResponse as SpotifyApiResponse.Success).result.items
 
-            Response(
-                status = HttpStatusCode.OK,
+            getSuccessResponse(
                 data = LandingPageResponse(
                     topArtists = response[0] as List<TopEntity>,
                     topAlbums = response[1] as List<TopEntity>,

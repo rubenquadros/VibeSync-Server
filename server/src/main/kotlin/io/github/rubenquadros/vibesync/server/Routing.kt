@@ -1,5 +1,6 @@
 package io.github.rubenquadros.vibesync.server
 
+import io.github.rubenquadros.vibesync.server.album.albumRoute
 import io.github.rubenquadros.vibesync.server.artist.artistRoute
 import io.github.rubenquadros.vibesync.server.home.homeRoute
 import io.ktor.server.application.Application
@@ -9,5 +10,6 @@ fun Application.configureRouting() {
     routing {
         homeRoute()
         artistRoute()
+        albumRoute()
     }
 }

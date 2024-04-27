@@ -6,10 +6,11 @@ import io.github.rubenquadros.kovibes.api.response.ArtistTopTracks
 import io.github.rubenquadros.kovibes.api.response.RelatedArtists
 import io.github.rubenquadros.vibesync.kovibes.SpotifyApi
 import io.github.rubenquadros.vibesync.server.model.Response
-import io.github.rubenquadros.vibesync.server.model.getErrorResponse
+import io.github.rubenquadros.vibesync.server.model.getServerErrorResponse
+import io.github.rubenquadros.vibesync.server.model.getSuccessResponse
 import io.github.rubenquadros.vibesync.server.model.toMediaInfo
+import io.github.rubenquadros.vibesync.server.model.toTrackInfo
 import io.github.rubenquadros.vibesync.server.util.toApiResponse
-import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -34,7 +35,7 @@ class ArtistApiImpl(private val spotifyApi: SpotifyApi) : ArtistApi {
                 )
             }.awaitAll()
         }.getOrElse {
-            return getErrorResponse(message = it.message.toString())
+            return getServerErrorResponse(message = it.message.toString())
         }
 
         return spotifyResponse.toApiResponse { successResults ->
@@ -43,12 +44,11 @@ class ArtistApiImpl(private val spotifyApi: SpotifyApi) : ArtistApi {
             val artistTopTracks = successResults[2] as ArtistTopTracks
             val relatedArtists = successResults[3] as RelatedArtists
 
-            Response(
-                status = HttpStatusCode.OK,
+            getSuccessResponse(
                 data = GetArtistResponse(
                     artistInfo = artist.toArtistInfo(),
                     albums = artistAlbums.items.map { it.toMediaInfo() },
-                    topTracks = artistTopTracks.tracks.map { it.toTopTrackInfo() },
+                    topTracks = artistTopTracks.tracks.map { it.toTrackInfo() },
                     relatedArtists = relatedArtists.artists.map { it.toMediaInfo() }
                 )
             )
