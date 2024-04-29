@@ -7,12 +7,14 @@ import io.github.rubenquadros.kovibes.api.response.AlbumTracks
 import io.github.rubenquadros.kovibes.api.response.Albums
 import io.github.rubenquadros.kovibes.api.response.Artist
 import io.github.rubenquadros.kovibes.api.response.ArtistTopTracks
+import io.github.rubenquadros.kovibes.api.response.Artists
 import io.github.rubenquadros.kovibes.api.response.ErrorBody
 import io.github.rubenquadros.kovibes.api.response.Playlist
 import io.github.rubenquadros.kovibes.api.response.PlaylistTracks
 import io.github.rubenquadros.kovibes.api.response.Playlists
 import io.github.rubenquadros.kovibes.api.response.RelatedArtists
 import io.github.rubenquadros.kovibes.api.response.SpotifyApiResponse
+import io.github.rubenquadros.kovibes.api.response.Tracks
 import org.koin.core.annotation.Single
 
 @Single
@@ -63,5 +65,25 @@ class SpotifyApiImpl : SpotifyApi {
 
     override suspend fun getPlaylistTracks(id: String, offset: Int, limit: Int): SpotifyApiResponse<PlaylistTracks, ErrorBody> {
         return spotifyService.getPlaylistTracks(id = id, offset = offset, limit = limit)
+    }
+
+    override suspend fun searchTrack(query: String, offset: Int, limit: Int): SpotifyApiResponse<Tracks, ErrorBody> {
+        return spotifyService.searchTrack(query = query, offset = offset, limit = limit)
+    }
+
+    override suspend fun searchArtist(query: String, offset: Int, limit: Int): SpotifyApiResponse<Artists, ErrorBody> {
+        return spotifyService.searchArtist(query = query, offset = offset, limit = limit)
+    }
+
+    override suspend fun searchAlbum(query: String, offset: Int, limit: Int): SpotifyApiResponse<Albums, ErrorBody> {
+        return spotifyService.searchAlbum(query = query, offset = offset, limit = limit)
+    }
+
+    override suspend fun searchPlaylist(
+        query: String,
+        offset: Int,
+        limit: Int
+    ): SpotifyApiResponse<Playlists, ErrorBody> {
+        return spotifyService.searchPlaylist(query = query, offset = offset, limit = limit)
     }
 }

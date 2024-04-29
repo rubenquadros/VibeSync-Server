@@ -5,12 +5,14 @@ import io.github.rubenquadros.kovibes.api.response.AlbumTracks
 import io.github.rubenquadros.kovibes.api.response.Albums
 import io.github.rubenquadros.kovibes.api.response.Artist
 import io.github.rubenquadros.kovibes.api.response.ArtistTopTracks
+import io.github.rubenquadros.kovibes.api.response.Artists
 import io.github.rubenquadros.kovibes.api.response.ErrorBody
 import io.github.rubenquadros.kovibes.api.response.Playlist
 import io.github.rubenquadros.kovibes.api.response.PlaylistTracks
 import io.github.rubenquadros.kovibes.api.response.Playlists
 import io.github.rubenquadros.kovibes.api.response.RelatedArtists
 import io.github.rubenquadros.kovibes.api.response.SpotifyApiResponse
+import io.github.rubenquadros.kovibes.api.response.Tracks
 
 interface SpotifyApi {
     suspend fun getFeaturedPlaylists(): SpotifyApiResponse<Playlists, ErrorBody>
@@ -22,4 +24,8 @@ interface SpotifyApi {
     suspend fun getAlbumTracks(id: String, offset: Int, limit: Int): SpotifyApiResponse<AlbumTracks, ErrorBody>
     suspend fun getPlaylist(id: String): SpotifyApiResponse<Playlist, ErrorBody>
     suspend fun getPlaylistTracks(id: String, offset: Int, limit: Int): SpotifyApiResponse<PlaylistTracks, ErrorBody>
+    suspend fun searchTrack(query: String, offset: Int, limit: Int): SpotifyApiResponse<Tracks, ErrorBody>
+    suspend fun searchArtist(query: String, offset: Int, limit: Int): SpotifyApiResponse<Artists, ErrorBody>
+    suspend fun searchAlbum(query: String, offset: Int, limit: Int): SpotifyApiResponse<Albums, ErrorBody>
+    suspend fun searchPlaylist(query: String, offset: Int, limit: Int): SpotifyApiResponse<Playlists, ErrorBody>
 }

@@ -6,6 +6,7 @@ import io.github.rubenquadros.kovibes.api.response.AlbumTracks
 import io.github.rubenquadros.kovibes.api.response.Albums
 import io.github.rubenquadros.kovibes.api.response.Artist
 import io.github.rubenquadros.kovibes.api.response.ArtistTopTracks
+import io.github.rubenquadros.kovibes.api.response.Artists
 import io.github.rubenquadros.kovibes.api.response.Error
 import io.github.rubenquadros.kovibes.api.response.ErrorBody
 import io.github.rubenquadros.kovibes.api.response.Playlist
@@ -14,6 +15,7 @@ import io.github.rubenquadros.kovibes.api.response.Playlists
 import io.github.rubenquadros.kovibes.api.response.RelatedArtists
 import io.github.rubenquadros.kovibes.api.response.SpotifyApiResponse
 import io.github.rubenquadros.kovibes.api.response.Track
+import io.github.rubenquadros.kovibes.api.response.Tracks
 
 val errorResponse = SpotifyApiResponse.Error(
     body = ErrorBody(
@@ -75,6 +77,22 @@ val playlistTracksResponse = SpotifyApiResponse.Success(
     )
 )
 
+val searchTrackResponse = SpotifyApiResponse.Success(
+    result = Tracks(isNext = true, items = geTracks())
+)
+
+val searchAlbumResponse = SpotifyApiResponse.Success(
+    result = Albums(isNext = true, items = getAlbums())
+)
+
+val searchArtistResponse = SpotifyApiResponse.Success(
+    result = Artists(isNext = true, items = getArtists())
+)
+
+val searchPlaylistResponse = SpotifyApiResponse.Success(
+    result = Playlists(isNext = true, items = getPlaylists())
+)
+
 val album1 get() = Album(
     albumType = "album",
     albumGroup = "album",
@@ -98,6 +116,12 @@ val playlist1 get() = Playlist(
 )
 
 fun geTracks(): List<Track> = listOf(track1, track2)
+
+fun getPlaylists(): List<Playlist> = listOf(playlist1, playlist2)
+
+fun getAlbums(): List<Album> = listOf(album1, album2)
+
+fun getArtists(): List<Artist> = listOf(artist1, artist2)
 
 private val artist1 get() = Artist(
     followers = 1000,
@@ -170,10 +194,6 @@ private val playlist2 get() = Playlist(
     images = emptyList(),
     public = true
 )
-
-private fun getPlaylists(): List<Playlist> = listOf(playlist1, playlist2)
-
-private fun getAlbums(): List<Album> = listOf(album1, album2)
 
 private fun getAlbumTracks(): List<AlbumTrack> = listOf(
     AlbumTrack(

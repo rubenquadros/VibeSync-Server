@@ -1,7 +1,10 @@
 package io.github.rubenquadros.vibesync.server.album
 
+import io.github.rubenquadros.kovibes.api.response.Album
+import io.github.rubenquadros.vibesync.server.artist.toArtistInfo
 import io.github.rubenquadros.vibesync.server.model.ArtistInfo
 import io.github.rubenquadros.vibesync.server.model.Image
+import io.github.rubenquadros.vibesync.server.model.toImage
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -20,3 +23,14 @@ data class GetAlbumResponse(
     @SerialName("images")
     val images: List<Image>
 )
+
+fun Album.toAlbumResponse(): GetAlbumResponse {
+    return GetAlbumResponse(
+        id = id,
+        name = name,
+        releaseDate = releaseDate,
+        albumType = albumType,
+        artists = artists.map { it.toArtistInfo() },
+        images = images.map { it.toImage() }
+    )
+}
