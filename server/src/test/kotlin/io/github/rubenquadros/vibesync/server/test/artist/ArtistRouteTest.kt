@@ -7,7 +7,10 @@ import io.github.rubenquadros.vibesync.server.test.assertOk
 import io.github.rubenquadros.vibesync.server.test.cleanupKoin
 import io.github.rubenquadros.vibesync.server.test.setupKoin
 import io.github.rubenquadros.vibesync.server.test.testApplication
-import io.github.rubenquadros.vibesync.test.data.artist
+import io.github.rubenquadros.vibesync.test.data.albumsResponse
+import io.github.rubenquadros.vibesync.test.data.artistResponse
+import io.github.rubenquadros.vibesync.test.data.artistTopTracksResponse
+import io.github.rubenquadros.vibesync.test.data.relatedArtistsResponse
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import org.koin.dsl.module
@@ -38,10 +41,10 @@ class ArtistRouteTest : KoinTest {
         val body = response.body<GetArtistResponse>()
 
         with(body) {
-            assert(artistInfo.id == artist.result.id)
-            assert(albums.size == 2)
-            assert(topTracks.size == 2)
-            assert(relatedArtists.size == 1)
+            assert(artistInfo.id == artistResponse.result.id)
+            assert(albums.size == albumsResponse.result.items.size)
+            assert(topTracks.size == artistTopTracksResponse.result.tracks.size)
+            assert(relatedArtists.size == relatedArtistsResponse.result.artists.size)
         }
     }
 

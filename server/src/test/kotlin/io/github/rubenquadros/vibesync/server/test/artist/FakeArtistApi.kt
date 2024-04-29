@@ -9,10 +9,10 @@ import io.github.rubenquadros.vibesync.server.model.getSuccessResponse
 import io.github.rubenquadros.vibesync.server.model.toMediaInfo
 import io.github.rubenquadros.vibesync.server.model.toTrackInfo
 import io.github.rubenquadros.vibesync.server.test.errorMessage
-import io.github.rubenquadros.vibesync.test.data.albums
-import io.github.rubenquadros.vibesync.test.data.artist
-import io.github.rubenquadros.vibesync.test.data.artistTopTracks
-import io.github.rubenquadros.vibesync.test.data.relatedArtists
+import io.github.rubenquadros.vibesync.test.data.albumsResponse
+import io.github.rubenquadros.vibesync.test.data.artistResponse
+import io.github.rubenquadros.vibesync.test.data.artistTopTracksResponse
+import io.github.rubenquadros.vibesync.test.data.relatedArtistsResponse
 
 class FakeArtistApi : ArtistApi {
 
@@ -26,10 +26,10 @@ class FakeArtistApi : ArtistApi {
         } else {
             getSuccessResponse(
                 data = GetArtistResponse(
-                    artistInfo = artist.result.toArtistInfo(),
-                    topTracks = artistTopTracks.result.tracks.map { it.toTrackInfo() },
-                    relatedArtists = relatedArtists.result.artists.map { it.toMediaInfo() },
-                    albums = albums.result.items.map { it.toMediaInfo() }
+                    artistInfo = artistResponse.result.toArtistInfo(),
+                    topTracks = artistTopTracksResponse.result.tracks.map { it.toTrackInfo() },
+                    relatedArtists = relatedArtistsResponse.result.artists.map { it.toMediaInfo() },
+                    albums = albumsResponse.result.items.map { it.toMediaInfo() }
                 )
             )
         }

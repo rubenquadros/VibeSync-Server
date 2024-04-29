@@ -9,6 +9,7 @@ import io.github.rubenquadros.kovibes.api.response.ArtistTopTracks
 import io.github.rubenquadros.kovibes.api.response.Error
 import io.github.rubenquadros.kovibes.api.response.ErrorBody
 import io.github.rubenquadros.kovibes.api.response.Playlist
+import io.github.rubenquadros.kovibes.api.response.PlaylistTracks
 import io.github.rubenquadros.kovibes.api.response.Playlists
 import io.github.rubenquadros.kovibes.api.response.RelatedArtists
 import io.github.rubenquadros.kovibes.api.response.SpotifyApiResponse
@@ -29,37 +30,48 @@ val featuredPlaylistsResponse = SpotifyApiResponse.Success(
     )
 )
 
-val artist = SpotifyApiResponse.Success(
+val artistResponse = SpotifyApiResponse.Success(
     result = artist1
 )
 
-val albums = SpotifyApiResponse.Success(
+val albumsResponse = SpotifyApiResponse.Success(
     result = Albums(
         isNext = false,
         items = getAlbums()
     )
 )
 
-val artistTopTracks = SpotifyApiResponse.Success(
+val artistTopTracksResponse = SpotifyApiResponse.Success(
     result = ArtistTopTracks(
         tracks = geTracks()
     )
 )
 
-val relatedArtists = SpotifyApiResponse.Success(
+val relatedArtistsResponse = SpotifyApiResponse.Success(
     result = RelatedArtists(
         artists = listOf(artist2)
     )
 )
 
-val album = SpotifyApiResponse.Success(
+val albumResponse = SpotifyApiResponse.Success(
     result = album1
 )
 
-val albumTracks = SpotifyApiResponse.Success(
+val albumTracksResponse = SpotifyApiResponse.Success(
     result = AlbumTracks(
         isNext = false,
         items = getAlbumTracks()
+    )
+)
+
+val playlistResponse = SpotifyApiResponse.Success(
+    result = playlist1
+)
+
+val playlistTracksResponse = SpotifyApiResponse.Success(
+    result = PlaylistTracks(
+        isNext = false,
+        tracks = listOf(track1, track2)
     )
 )
 
@@ -74,6 +86,15 @@ val album1 get() = Album(
     images = emptyList(),
     restrictions = null,
     artists = listOf(artist1)
+)
+
+val playlist1 get() = Playlist(
+    collaborative = false,
+    description = "D1",
+    id = "123",
+    name = "Playlist1",
+    images = emptyList(),
+    public = true
 )
 
 fun geTracks(): List<Track> = listOf(track1, track2)
@@ -141,24 +162,16 @@ private val track2 get() = Track(
 
 private val availableMarkets get() = listOf("US", "ES")
 
-private fun getPlaylists(): List<Playlist> = listOf(
-    Playlist(
-        collaborative = false,
-        description = "D1",
-        id = "123",
-        name = "Playlist1",
-        images = emptyList(),
-        public = true
-    ),
-    Playlist(
-        collaborative = false,
-        description = "D2",
-        id = "456",
-        name = "Playlist2",
-        images = emptyList(),
-        public = true
-    )
+private val playlist2 get() = Playlist(
+    collaborative = false,
+    description = "D2",
+    id = "456",
+    name = "Playlist2",
+    images = emptyList(),
+    public = true
 )
+
+private fun getPlaylists(): List<Playlist> = listOf(playlist1, playlist2)
 
 private fun getAlbums(): List<Album> = listOf(album1, album2)
 

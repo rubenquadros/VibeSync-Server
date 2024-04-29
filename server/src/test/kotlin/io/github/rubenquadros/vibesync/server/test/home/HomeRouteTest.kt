@@ -7,6 +7,8 @@ import io.github.rubenquadros.vibesync.server.test.assertOk
 import io.github.rubenquadros.vibesync.server.test.cleanupKoin
 import io.github.rubenquadros.vibesync.server.test.setupKoin
 import io.github.rubenquadros.vibesync.server.test.testApplication
+import io.github.rubenquadros.vibesync.test.data.featuredPlaylistsResponse
+import io.github.rubenquadros.vibesync.test.data.topEntity
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import org.koin.dsl.module
@@ -36,11 +38,11 @@ class HomeRouteTest: KoinTest {
         val body = response.body<LandingPageResponse>()
 
         with(body) {
-            assert(topArtists.size == 2)
-            assert(topTracks.size == 2)
-            assert(recentTracks?.size == 2)
-            assert(topAlbums.size == 2)
-            assert(featuredPlaylists.size == 2)
+            assert(topArtists.size == topEntity.size)
+            assert(topTracks.size == topEntity.size)
+            assert(recentTracks?.size == topEntity.size)
+            assert(topAlbums.size == topEntity.size)
+            assert(featuredPlaylists.size == featuredPlaylistsResponse.result.items.size)
         }
     }
 

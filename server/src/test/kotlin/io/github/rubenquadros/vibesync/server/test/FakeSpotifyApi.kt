@@ -6,17 +6,21 @@ import io.github.rubenquadros.kovibes.api.response.Albums
 import io.github.rubenquadros.kovibes.api.response.Artist
 import io.github.rubenquadros.kovibes.api.response.ArtistTopTracks
 import io.github.rubenquadros.kovibes.api.response.ErrorBody
+import io.github.rubenquadros.kovibes.api.response.Playlist
+import io.github.rubenquadros.kovibes.api.response.PlaylistTracks
 import io.github.rubenquadros.kovibes.api.response.Playlists
 import io.github.rubenquadros.kovibes.api.response.RelatedArtists
 import io.github.rubenquadros.kovibes.api.response.SpotifyApiResponse
 import io.github.rubenquadros.vibesync.kovibes.SpotifyApi
-import io.github.rubenquadros.vibesync.test.data.album
-import io.github.rubenquadros.vibesync.test.data.albumTracks
-import io.github.rubenquadros.vibesync.test.data.albums
-import io.github.rubenquadros.vibesync.test.data.artist
-import io.github.rubenquadros.vibesync.test.data.artistTopTracks
+import io.github.rubenquadros.vibesync.test.data.albumResponse
+import io.github.rubenquadros.vibesync.test.data.albumTracksResponse
+import io.github.rubenquadros.vibesync.test.data.albumsResponse
+import io.github.rubenquadros.vibesync.test.data.artistResponse
+import io.github.rubenquadros.vibesync.test.data.artistTopTracksResponse
 import io.github.rubenquadros.vibesync.test.data.featuredPlaylistsResponse
-import io.github.rubenquadros.vibesync.test.data.relatedArtists
+import io.github.rubenquadros.vibesync.test.data.playlistResponse
+import io.github.rubenquadros.vibesync.test.data.playlistTracksResponse
+import io.github.rubenquadros.vibesync.test.data.relatedArtistsResponse
 
 class FakeSpotifyApi : SpotifyApi {
 
@@ -29,23 +33,23 @@ class FakeSpotifyApi : SpotifyApi {
     }
 
     override suspend fun getArtist(id: String): SpotifyApiResponse<Artist, ErrorBody> {
-        return getSpotifyResponse(isError, artist)
+        return getSpotifyResponse(isError, artistResponse)
     }
 
     override suspend fun getArtistAlbums(id: String): SpotifyApiResponse<Albums, ErrorBody> {
-        return getSpotifyResponse(isError, albums)
+        return getSpotifyResponse(isError, albumsResponse)
     }
 
     override suspend fun getArtistTopTracks(id: String): SpotifyApiResponse<ArtistTopTracks, ErrorBody> {
-        return getSpotifyResponse(isError, artistTopTracks)
+        return getSpotifyResponse(isError, artistTopTracksResponse)
     }
 
     override suspend fun getRelatedArtists(id: String): SpotifyApiResponse<RelatedArtists, ErrorBody> {
-        return getSpotifyResponse(isError, relatedArtists)
+        return getSpotifyResponse(isError, relatedArtistsResponse)
     }
 
     override suspend fun getAlbum(id: String): SpotifyApiResponse<Album, ErrorBody> {
-        return getSpotifyResponse(isError, album)
+        return getSpotifyResponse(isError, albumResponse)
     }
 
     override suspend fun getAlbumTracks(
@@ -53,6 +57,14 @@ class FakeSpotifyApi : SpotifyApi {
         offset: Int,
         limit: Int
     ): SpotifyApiResponse<AlbumTracks, ErrorBody> {
-        return getSpotifyResponse(isError, albumTracks)
+        return getSpotifyResponse(isError, albumTracksResponse)
+    }
+
+    override suspend fun getPlaylist(id: String): SpotifyApiResponse<Playlist, ErrorBody> {
+        return getSpotifyResponse(isError, playlistResponse)
+    }
+
+    override suspend fun getPlaylistTracks(id: String, offset: Int, limit: Int): SpotifyApiResponse<PlaylistTracks, ErrorBody> {
+        return getSpotifyResponse(isError, playlistTracksResponse)
     }
 }

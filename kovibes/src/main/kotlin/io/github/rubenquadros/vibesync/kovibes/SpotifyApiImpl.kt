@@ -8,6 +8,8 @@ import io.github.rubenquadros.kovibes.api.response.Albums
 import io.github.rubenquadros.kovibes.api.response.Artist
 import io.github.rubenquadros.kovibes.api.response.ArtistTopTracks
 import io.github.rubenquadros.kovibes.api.response.ErrorBody
+import io.github.rubenquadros.kovibes.api.response.Playlist
+import io.github.rubenquadros.kovibes.api.response.PlaylistTracks
 import io.github.rubenquadros.kovibes.api.response.Playlists
 import io.github.rubenquadros.kovibes.api.response.RelatedArtists
 import io.github.rubenquadros.kovibes.api.response.SpotifyApiResponse
@@ -53,5 +55,13 @@ class SpotifyApiImpl : SpotifyApi {
         limit: Int
     ): SpotifyApiResponse<AlbumTracks, ErrorBody> {
         return spotifyService.getAlbumTracks(id = id, offset = offset, limit = limit)
+    }
+
+    override suspend fun getPlaylist(id: String): SpotifyApiResponse<Playlist, ErrorBody> {
+        return spotifyService.getPlaylist(id)
+    }
+
+    override suspend fun getPlaylistTracks(id: String, offset: Int, limit: Int): SpotifyApiResponse<PlaylistTracks, ErrorBody> {
+        return spotifyService.getPlaylistTracks(id = id, offset = offset, limit = limit)
     }
 }
