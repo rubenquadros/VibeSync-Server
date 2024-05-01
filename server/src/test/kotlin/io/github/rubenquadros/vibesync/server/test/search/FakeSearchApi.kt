@@ -2,15 +2,16 @@ package io.github.rubenquadros.vibesync.server.test.search
 
 import io.github.rubenquadros.vibesync.server.album.toAlbumResponse
 import io.github.rubenquadros.vibesync.server.artist.toArtistInfo
+import io.github.rubenquadros.vibesync.server.model.GetPaginatedResponse
 import io.github.rubenquadros.vibesync.server.model.Response
+import io.github.rubenquadros.vibesync.server.model.SearchAlbums
+import io.github.rubenquadros.vibesync.server.model.SearchArtists
+import io.github.rubenquadros.vibesync.server.model.SearchPlaylists
+import io.github.rubenquadros.vibesync.server.model.SearchTracks
 import io.github.rubenquadros.vibesync.server.model.getServerErrorResponse
 import io.github.rubenquadros.vibesync.server.model.getSuccessResponse
 import io.github.rubenquadros.vibesync.server.model.toTrackInfo
 import io.github.rubenquadros.vibesync.server.playlist.toPlaylistResponse
-import io.github.rubenquadros.vibesync.server.search.GetSearchAlbumResponse
-import io.github.rubenquadros.vibesync.server.search.GetSearchArtistResponse
-import io.github.rubenquadros.vibesync.server.search.GetSearchPlaylistResponse
-import io.github.rubenquadros.vibesync.server.search.GetSearchTrackResponse
 import io.github.rubenquadros.vibesync.server.search.SearchApi
 import io.github.rubenquadros.vibesync.server.test.errorMessage
 import io.github.rubenquadros.vibesync.test.data.geTracks
@@ -29,9 +30,9 @@ class FakeSearchApi : SearchApi {
             getServerErrorResponse(errorMessage)
         } else {
             getSuccessResponse(
-                data = GetSearchTrackResponse(
+                data = GetPaginatedResponse(
                     isNext = true,
-                    tracks = geTracks().map { it.toTrackInfo() }
+                    content = SearchTracks(geTracks().map { it.toTrackInfo() })
                 )
             )
         }
@@ -42,9 +43,9 @@ class FakeSearchApi : SearchApi {
             getServerErrorResponse(errorMessage)
         } else {
             getSuccessResponse(
-                data = GetSearchArtistResponse(
+                data = GetPaginatedResponse(
                     isNext = true,
-                    artists = getArtists().map { it.toArtistInfo() }
+                    content = SearchArtists(getArtists().map { it.toArtistInfo() })
                 )
             )
         }
@@ -55,9 +56,9 @@ class FakeSearchApi : SearchApi {
             getServerErrorResponse(errorMessage)
         } else {
             getSuccessResponse(
-                data = GetSearchAlbumResponse(
+                data = GetPaginatedResponse(
                     isNext = true,
-                    albums = getAlbums().map { it.toAlbumResponse() }
+                    content = SearchAlbums(getAlbums().map { it.toAlbumResponse() })
                 )
             )
         }
@@ -68,9 +69,9 @@ class FakeSearchApi : SearchApi {
             getServerErrorResponse(errorMessage)
         } else {
             getSuccessResponse(
-                data = GetSearchPlaylistResponse(
+                data = GetPaginatedResponse(
                     isNext = true,
-                    playlists = getPlaylists().map { it.toPlaylistResponse() }
+                    content = SearchPlaylists(getPlaylists().map { it.toPlaylistResponse() })
                 )
             )
         }

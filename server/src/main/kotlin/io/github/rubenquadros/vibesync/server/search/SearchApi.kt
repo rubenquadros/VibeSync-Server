@@ -4,7 +4,12 @@ import io.github.rubenquadros.kovibes.api.response.SpotifyApiResponse
 import io.github.rubenquadros.vibesync.kovibes.SpotifyApi
 import io.github.rubenquadros.vibesync.server.album.toAlbumResponse
 import io.github.rubenquadros.vibesync.server.artist.toArtistInfo
+import io.github.rubenquadros.vibesync.server.model.GetPaginatedResponse
 import io.github.rubenquadros.vibesync.server.model.Response
+import io.github.rubenquadros.vibesync.server.model.SearchAlbums
+import io.github.rubenquadros.vibesync.server.model.SearchArtists
+import io.github.rubenquadros.vibesync.server.model.SearchPlaylists
+import io.github.rubenquadros.vibesync.server.model.SearchTracks
 import io.github.rubenquadros.vibesync.server.model.getErrorResponse
 import io.github.rubenquadros.vibesync.server.model.getServerErrorResponse
 import io.github.rubenquadros.vibesync.server.model.getSuccessResponse
@@ -35,9 +40,9 @@ class SearchApiImpl(private val spotifyApi: SpotifyApi) : SearchApi {
         return if (spotifyResponse is SpotifyApiResponse.Success) {
             with(spotifyResponse.result) {
                 getSuccessResponse(
-                    data = GetSearchTrackResponse(
+                    data = GetPaginatedResponse(
                         isNext = isNext,
-                        tracks = items.map { it.toTrackInfo() }
+                        content = SearchTracks(tracks = items.map { it.toTrackInfo() })
                     )
                 )
             }
@@ -58,9 +63,9 @@ class SearchApiImpl(private val spotifyApi: SpotifyApi) : SearchApi {
         return if (spotifyResponse is SpotifyApiResponse.Success) {
             with(spotifyResponse.result) {
                 getSuccessResponse(
-                    data = GetSearchArtistResponse(
+                    data = GetPaginatedResponse(
                         isNext = isNext,
-                        artists = items.map { it.toArtistInfo() }
+                        content = SearchArtists(artists = items.map { it.toArtistInfo() })
                     )
                 )
             }
@@ -79,9 +84,9 @@ class SearchApiImpl(private val spotifyApi: SpotifyApi) : SearchApi {
         return if (spotifyResponse is SpotifyApiResponse.Success) {
             with(spotifyResponse.result) {
                 getSuccessResponse(
-                    data = GetSearchAlbumResponse(
+                    data = GetPaginatedResponse(
                         isNext = isNext,
-                        albums = items.map { it.toAlbumResponse() }
+                        content = SearchAlbums(albums = items.map { it.toAlbumResponse() })
                     )
                 )
             }
@@ -100,9 +105,9 @@ class SearchApiImpl(private val spotifyApi: SpotifyApi) : SearchApi {
         return if (spotifyResponse is SpotifyApiResponse.Success) {
             with(spotifyResponse.result) {
                 getSuccessResponse(
-                    data = GetSearchPlaylistResponse(
+                    data = GetPaginatedResponse(
                         isNext = isNext,
-                        playlists = items.map { it.toPlaylistResponse() }
+                        content = SearchPlaylists(playlists = items.map { it.toPlaylistResponse() })
                     )
                 )
             }

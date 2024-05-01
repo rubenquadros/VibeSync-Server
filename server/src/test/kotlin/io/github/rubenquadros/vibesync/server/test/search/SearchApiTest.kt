@@ -1,9 +1,10 @@
 package io.github.rubenquadros.vibesync.server.test.search
 
-import io.github.rubenquadros.vibesync.server.search.GetSearchAlbumResponse
-import io.github.rubenquadros.vibesync.server.search.GetSearchArtistResponse
-import io.github.rubenquadros.vibesync.server.search.GetSearchPlaylistResponse
-import io.github.rubenquadros.vibesync.server.search.GetSearchTrackResponse
+import io.github.rubenquadros.vibesync.server.model.GetPaginatedResponse
+import io.github.rubenquadros.vibesync.server.model.SearchAlbums
+import io.github.rubenquadros.vibesync.server.model.SearchArtists
+import io.github.rubenquadros.vibesync.server.model.SearchPlaylists
+import io.github.rubenquadros.vibesync.server.model.SearchTracks
 import io.github.rubenquadros.vibesync.server.search.SearchApiImpl
 import io.github.rubenquadros.vibesync.server.test.FakeSpotifyApi
 import io.github.rubenquadros.vibesync.server.test.assertSpotifyFailure
@@ -21,10 +22,10 @@ class SearchApiTest {
 
         val response = searchApi.searchTrack(query = "abc", offset = 0, limit = 20)
 
-        response.assertSuccess<GetSearchTrackResponse> {
+        response.assertSuccess<GetPaginatedResponse> {
             with(it) {
                 assert(isNext)
-                assert(tracks.isNotEmpty())
+                assert((content as SearchTracks).tracks.isNotEmpty())
             }
         }
     }
@@ -44,10 +45,10 @@ class SearchApiTest {
 
         val response = searchApi.searchAlbum(query = "abc", offset = 0, limit = 20)
 
-        response.assertSuccess<GetSearchAlbumResponse> {
+        response.assertSuccess<GetPaginatedResponse> {
             with(it) {
                 assert(isNext)
-                assert(albums.isNotEmpty())
+                assert((content as SearchAlbums).albums.isNotEmpty())
             }
         }
     }
@@ -67,10 +68,10 @@ class SearchApiTest {
 
         val response = searchApi.searchArtist(query = "abc", offset = 0, limit = 20)
 
-        response.assertSuccess<GetSearchArtistResponse> {
+        response.assertSuccess<GetPaginatedResponse> {
             with(it) {
                 assert(isNext)
-                assert(artists.isNotEmpty())
+                assert((content as SearchArtists).artists.isNotEmpty())
             }
         }
     }
@@ -90,10 +91,10 @@ class SearchApiTest {
 
         val response = searchApi.searchPlaylist(query = "abc", offset = 0, limit = 20)
 
-        response.assertSuccess<GetSearchPlaylistResponse> {
+        response.assertSuccess<GetPaginatedResponse> {
             with(it) {
                 assert(isNext)
-                assert(playlists.isNotEmpty())
+                assert((content as SearchPlaylists).playlists.isNotEmpty())
             }
         }
     }

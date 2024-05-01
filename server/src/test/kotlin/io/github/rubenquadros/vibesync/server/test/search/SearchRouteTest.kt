@@ -1,9 +1,10 @@
 package io.github.rubenquadros.vibesync.server.test.search
 
-import io.github.rubenquadros.vibesync.server.search.GetSearchAlbumResponse
-import io.github.rubenquadros.vibesync.server.search.GetSearchArtistResponse
-import io.github.rubenquadros.vibesync.server.search.GetSearchPlaylistResponse
-import io.github.rubenquadros.vibesync.server.search.GetSearchTrackResponse
+import io.github.rubenquadros.vibesync.server.model.GetPaginatedResponse
+import io.github.rubenquadros.vibesync.server.model.SearchAlbums
+import io.github.rubenquadros.vibesync.server.model.SearchArtists
+import io.github.rubenquadros.vibesync.server.model.SearchPlaylists
+import io.github.rubenquadros.vibesync.server.model.SearchTracks
 import io.github.rubenquadros.vibesync.server.search.SearchApi
 import io.github.rubenquadros.vibesync.server.test.assertError
 import io.github.rubenquadros.vibesync.server.test.assertOk
@@ -37,11 +38,11 @@ class SearchRouteTest : KoinTest {
 
         response.assertOk()
 
-        val body = response.body<GetSearchTrackResponse>()
+        val body = response.body<GetPaginatedResponse>()
 
         with(body) {
             assert(isNext)
-            assert(tracks.isNotEmpty())
+            assert((content as SearchTracks).tracks.isNotEmpty())
         }
     }
 
@@ -62,11 +63,11 @@ class SearchRouteTest : KoinTest {
 
         response.assertOk()
 
-        val body = response.body<GetSearchAlbumResponse>()
+        val body = response.body<GetPaginatedResponse>()
 
         with(body) {
             assert(isNext)
-            assert(albums.isNotEmpty())
+            assert((content as SearchAlbums).albums.isNotEmpty())
         }
     }
 
@@ -87,11 +88,11 @@ class SearchRouteTest : KoinTest {
 
         response.assertOk()
 
-        val body = response.body<GetSearchArtistResponse>()
+        val body = response.body<GetPaginatedResponse>()
 
         with(body) {
             assert(isNext)
-            assert(artists.isNotEmpty())
+            assert((content as SearchArtists).artists.isNotEmpty())
         }
     }
 
@@ -112,11 +113,11 @@ class SearchRouteTest : KoinTest {
 
         response.assertOk()
 
-        val body = response.body<GetSearchPlaylistResponse>()
+        val body = response.body<GetPaginatedResponse>()
 
         with(body) {
             assert(isNext)
-            assert(playlists.isNotEmpty())
+            assert((content as SearchPlaylists).playlists.isNotEmpty())
         }
     }
 

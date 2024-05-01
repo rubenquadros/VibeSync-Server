@@ -1,12 +1,13 @@
 package io.github.rubenquadros.vibesync.server.test.playlist
 
+import io.github.rubenquadros.vibesync.server.model.GetPaginatedResponse
+import io.github.rubenquadros.vibesync.server.model.PlaylistTracks
 import io.github.rubenquadros.vibesync.server.model.Response
 import io.github.rubenquadros.vibesync.server.model.getServerErrorResponse
 import io.github.rubenquadros.vibesync.server.model.getSuccessResponse
 import io.github.rubenquadros.vibesync.server.model.toImage
 import io.github.rubenquadros.vibesync.server.model.toTrackInfo
 import io.github.rubenquadros.vibesync.server.playlist.GetPlaylistResponse
-import io.github.rubenquadros.vibesync.server.playlist.GetPlaylistTrackResponse
 import io.github.rubenquadros.vibesync.server.playlist.PlaylistApi
 import io.github.rubenquadros.vibesync.server.test.errorMessage
 import io.github.rubenquadros.vibesync.test.data.geTracks
@@ -37,9 +38,9 @@ class FakePlaylistApi : PlaylistApi {
             getServerErrorResponse(errorMessage)
         } else {
             getSuccessResponse(
-                data = GetPlaylistTrackResponse(
+                data = GetPaginatedResponse(
                     isNext = false,
-                    tracks = geTracks().map { it.toTrackInfo() }
+                    content = PlaylistTracks(geTracks().map { it.toTrackInfo() })
                 )
             )
         }

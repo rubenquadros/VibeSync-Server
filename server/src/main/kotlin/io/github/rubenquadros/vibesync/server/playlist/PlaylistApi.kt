@@ -2,6 +2,8 @@ package io.github.rubenquadros.vibesync.server.playlist
 
 import io.github.rubenquadros.kovibes.api.response.SpotifyApiResponse
 import io.github.rubenquadros.vibesync.kovibes.SpotifyApi
+import io.github.rubenquadros.vibesync.server.model.GetPaginatedResponse
+import io.github.rubenquadros.vibesync.server.model.PlaylistTracks
 import io.github.rubenquadros.vibesync.server.model.Response
 import io.github.rubenquadros.vibesync.server.model.getErrorResponse
 import io.github.rubenquadros.vibesync.server.model.getServerErrorResponse
@@ -55,9 +57,9 @@ class PlaylistApiImpl(private val spotifyApi: SpotifyApi) : PlaylistApi {
         return if (spotifyResponse is SpotifyApiResponse.Success) {
             with(spotifyResponse.result) {
                 getSuccessResponse(
-                    data = GetPlaylistTrackResponse(
+                    data = GetPaginatedResponse(
                         isNext = isNext,
-                        tracks = tracks.map { it.toTrackInfo() }
+                        content = PlaylistTracks(tracks = tracks.map { it.toTrackInfo() })
                     )
                 )
             }

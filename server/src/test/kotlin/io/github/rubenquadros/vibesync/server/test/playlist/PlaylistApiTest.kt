@@ -1,7 +1,8 @@
 package io.github.rubenquadros.vibesync.server.test.playlist
 
+import io.github.rubenquadros.vibesync.server.model.GetPaginatedResponse
+import io.github.rubenquadros.vibesync.server.model.PlaylistTracks
 import io.github.rubenquadros.vibesync.server.playlist.GetPlaylistResponse
-import io.github.rubenquadros.vibesync.server.playlist.GetPlaylistTrackResponse
 import io.github.rubenquadros.vibesync.server.playlist.PlaylistApiImpl
 import io.github.rubenquadros.vibesync.server.test.FakeSpotifyApi
 import io.github.rubenquadros.vibesync.server.test.assertSpotifyFailure
@@ -44,10 +45,10 @@ class PlaylistApiTest {
 
         val response = playlistApi.getPlaylistTracks(id = "123", offset = 0, limit = 20)
 
-        response.assertSuccess<GetPlaylistTrackResponse> {
+        response.assertSuccess<GetPaginatedResponse> {
             with(it) {
                 assert(!isNext)
-                assert(tracks.isNotEmpty())
+                assert((content as PlaylistTracks).tracks.isNotEmpty())
             }
         }
     }
