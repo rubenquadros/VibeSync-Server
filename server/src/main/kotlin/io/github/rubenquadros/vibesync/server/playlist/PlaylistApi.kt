@@ -6,7 +6,6 @@ import io.github.rubenquadros.vibesync.server.model.GetPaginatedResponse
 import io.github.rubenquadros.vibesync.server.model.PlaylistTracks
 import io.github.rubenquadros.vibesync.server.model.Response
 import io.github.rubenquadros.vibesync.server.model.getErrorResponse
-import io.github.rubenquadros.vibesync.server.model.getServerErrorResponse
 import io.github.rubenquadros.vibesync.server.model.getSuccessResponse
 import io.github.rubenquadros.vibesync.server.model.toImage
 import io.github.rubenquadros.vibesync.server.model.toTrackInfo
@@ -22,12 +21,8 @@ interface PlaylistApi {
 @Single
 class PlaylistApiImpl(private val spotifyApi: SpotifyApi) : PlaylistApi {
     override suspend fun getPlaylist(id: String): Response {
-        val spotifyResponse = runCatching {
-            withContext(Dispatchers.IO) {
-                spotifyApi.getPlaylist(id)
-            }
-        }.getOrElse {
-            return getServerErrorResponse(message = it.message.toString())
+        val spotifyResponse = withContext(Dispatchers.IO) {
+            spotifyApi.getPlaylist(id)
         }
 
         return if (spotifyResponse is SpotifyApiResponse.Success) {
@@ -46,12 +41,8 @@ class PlaylistApiImpl(private val spotifyApi: SpotifyApi) : PlaylistApi {
     }
 
     override suspend fun getPlaylistTracks(id: String, offset: Int, limit: Int): Response {
-        val spotifyResponse = runCatching {
-            withContext(Dispatchers.IO) {
-                spotifyApi.getPlaylistTracks(id, offset, limit)
-            }
-        }.getOrElse {
-            return getServerErrorResponse(message = it.message.toString())
+        val spotifyResponse = withContext(Dispatchers.IO) {
+            spotifyApi.getPlaylistTracks(id, offset, limit)
         }
 
         return if (spotifyResponse is SpotifyApiResponse.Success) {

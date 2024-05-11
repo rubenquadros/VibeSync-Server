@@ -11,7 +11,6 @@ import io.github.rubenquadros.vibesync.server.model.SearchArtists
 import io.github.rubenquadros.vibesync.server.model.SearchPlaylists
 import io.github.rubenquadros.vibesync.server.model.SearchTracks
 import io.github.rubenquadros.vibesync.server.model.getErrorResponse
-import io.github.rubenquadros.vibesync.server.model.getServerErrorResponse
 import io.github.rubenquadros.vibesync.server.model.getSuccessResponse
 import io.github.rubenquadros.vibesync.server.model.toTrackInfo
 import io.github.rubenquadros.vibesync.server.playlist.toPlaylistResponse
@@ -29,12 +28,8 @@ interface SearchApi {
 @Single
 class SearchApiImpl(private val spotifyApi: SpotifyApi) : SearchApi {
     override suspend fun searchTrack(query: String, offset: Int, limit: Int): Response {
-        val spotifyResponse = runCatching {
-            withContext(Dispatchers.IO) {
-                spotifyApi.searchTrack(query, offset, limit)
-            }
-        }.getOrElse {
-            return getServerErrorResponse(message = it.message.toString())
+        val spotifyResponse = withContext(Dispatchers.IO) {
+            spotifyApi.searchTrack(query, offset, limit)
         }
 
         return if (spotifyResponse is SpotifyApiResponse.Success) {
@@ -52,12 +47,8 @@ class SearchApiImpl(private val spotifyApi: SpotifyApi) : SearchApi {
     }
 
     override suspend fun searchArtist(query: String, offset: Int, limit: Int): Response {
-        val spotifyResponse = runCatching {
-            withContext(Dispatchers.IO) {
-                spotifyApi.searchArtist(query, offset, limit)
-            }
-        }.getOrElse {
-            return getServerErrorResponse(message = it.message.toString())
+        val spotifyResponse = withContext(Dispatchers.IO) {
+            spotifyApi.searchArtist(query, offset, limit)
         }
 
         return if (spotifyResponse is SpotifyApiResponse.Success) {
@@ -75,10 +66,8 @@ class SearchApiImpl(private val spotifyApi: SpotifyApi) : SearchApi {
     }
 
     override suspend fun searchAlbum(query: String, offset: Int, limit: Int): Response {
-        val spotifyResponse = runCatching {
+        val spotifyResponse = withContext(Dispatchers.IO) {
             spotifyApi.searchAlbum(query, offset, limit)
-        }.getOrElse {
-            return getServerErrorResponse(message = it.message.toString())
         }
 
         return if (spotifyResponse is SpotifyApiResponse.Success) {
@@ -96,10 +85,8 @@ class SearchApiImpl(private val spotifyApi: SpotifyApi) : SearchApi {
     }
 
     override suspend fun searchPlaylist(query: String, offset: Int, limit: Int): Response {
-        val spotifyResponse = runCatching {
+        val spotifyResponse = withContext(Dispatchers.IO) {
             spotifyApi.searchPlaylist(query, offset, limit)
-        }.getOrElse {
-            return getServerErrorResponse(message = it.message.toString())
         }
 
         return if (spotifyResponse is SpotifyApiResponse.Success) {
@@ -115,6 +102,4 @@ class SearchApiImpl(private val spotifyApi: SpotifyApi) : SearchApi {
             getErrorResponse(errorBody = (spotifyResponse as SpotifyApiResponse.Error).body)
         }
     }
-
-
 }

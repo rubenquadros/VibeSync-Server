@@ -5,7 +5,6 @@ import io.github.rubenquadros.vibesync.kovibes.SpotifyApi
 import io.github.rubenquadros.vibesync.server.artist.toArtistInfo
 import io.github.rubenquadros.vibesync.server.model.Response
 import io.github.rubenquadros.vibesync.server.model.getErrorResponse
-import io.github.rubenquadros.vibesync.server.model.getServerErrorResponse
 import io.github.rubenquadros.vibesync.server.model.getSuccessResponse
 import io.github.rubenquadros.vibesync.server.model.toImage
 import io.github.rubenquadros.vibesync.server.model.toTrackInfo
@@ -22,12 +21,8 @@ interface AlbumApi {
 @Single
 class AlbumApiImpl(private val spotifyApi: SpotifyApi) : AlbumApi {
     override suspend fun getAlbum(id: String): Response {
-        val spotifyResponse = runCatching {
-            withContext(Dispatchers.IO) {
-                spotifyApi.getAlbum(id)
-            }
-        }.getOrElse {
-            return getServerErrorResponse(it.message.toString())
+        val spotifyResponse = withContext(Dispatchers.IO) {
+            spotifyApi.getAlbum(id)
         }
 
         return if (spotifyResponse is SpotifyApiResponse.Success) {
@@ -49,12 +44,8 @@ class AlbumApiImpl(private val spotifyApi: SpotifyApi) : AlbumApi {
     }
 
     override suspend fun getAlbumTracks(id: String, offset: Int, limit: Int): Response {
-        val spotifyResponse = runCatching {
-            withContext(Dispatchers.IO) {
-                spotifyApi.getAlbumTracks(id, offset, limit)
-            }
-        }.getOrElse {
-            return getServerErrorResponse(it.message.toString())
+        val spotifyResponse = withContext(Dispatchers.IO) {
+            spotifyApi.getAlbumTracks(id, offset, limit)
         }
 
         return if (spotifyResponse is SpotifyApiResponse.Success) {

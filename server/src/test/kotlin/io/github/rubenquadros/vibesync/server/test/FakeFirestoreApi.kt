@@ -1,8 +1,10 @@
 package io.github.rubenquadros.vibesync.server.test
 
 import io.github.rubenquadros.vibesync.firestore.FirestoreApi
+import io.github.rubenquadros.vibesync.firestore.model.FirestoreApiResponse
 import io.github.rubenquadros.vibesync.firestore.model.TopEntity
-import io.github.rubenquadros.vibesync.test.data.topEntity
+import io.github.rubenquadros.vibesync.test.data.firestoreErrorResponse
+import io.github.rubenquadros.vibesync.test.data.topEntityResponse
 
 class FakeFirestoreApi : FirestoreApi {
 
@@ -10,35 +12,35 @@ class FakeFirestoreApi : FirestoreApi {
         var isError: Boolean = false
     }
 
-    override suspend fun getTopArtists(): List<TopEntity> {
+    override suspend fun getTopArtists(): FirestoreApiResponse<List<TopEntity>> {
         return if (isError) {
-            throw Exception("Error in fetching top artists.")
+            firestoreErrorResponse
         } else {
-            topEntity
+            topEntityResponse
         }
     }
 
-    override suspend fun getTopTracks(): List<TopEntity> {
+    override suspend fun getTopTracks(): FirestoreApiResponse<List<TopEntity>> {
         return if (isError) {
-            throw Exception("Error in fetching top tracks.")
+            firestoreErrorResponse
         } else {
-            topEntity
+            topEntityResponse
         }
     }
 
-    override suspend fun getTopAlbums(): List<TopEntity> {
+    override suspend fun getTopAlbums(): FirestoreApiResponse<List<TopEntity>> {
         return if (isError) {
-            throw Exception("Error in fetching top albums.")
+            firestoreErrorResponse
         } else {
-            topEntity
+            topEntityResponse
         }
     }
 
-    override suspend fun getRecentTracks(): List<TopEntity> {
+    override suspend fun getRecentTracks(): FirestoreApiResponse<List<TopEntity>> {
         return if (isError) {
-            throw Exception("Error in fetching recent tracks.")
+            firestoreErrorResponse
         } else {
-            topEntity
+            topEntityResponse
         }
     }
 }

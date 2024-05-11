@@ -19,10 +19,10 @@ fun Response.assertSpotifyFailure() {
     assert((data as Error).message == "Something went wrong.")
 }
 
-fun Response.assertFirestoreFailure(block: (error: Error) -> Unit) {
+fun Response.assertFirestoreFailure() {
     assert(status == HttpStatusCode.InternalServerError)
     assert(data is Error)
-    block(data as Error)
+    assert((data as Error).message == "Error fetching firestore data")
 }
 
 fun HttpResponse.assertOk() {

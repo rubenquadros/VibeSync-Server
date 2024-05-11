@@ -55,8 +55,6 @@ class HomeApiTest {
 
         val response = homeApi.getHomePage()
 
-        response.assertFirestoreFailure {
-            assert(it.message == "Error in fetching top artists.")
-        }
+        response.assertFirestoreFailure()
     }
 }
