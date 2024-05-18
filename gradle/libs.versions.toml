@@ -9,6 +9,7 @@ ksp = "1.9.23-1.0.19"
 coroutines = "1.8.0"
 firebase = "9.2.0"
 mockk = "1.13.10"
+google-api-client = "2.4.0"
 
 [libraries]
 # ktor
@@ -38,6 +39,9 @@ coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", ve
 
 # firebase
 firebase-admin = { module = "com.google.firebase:firebase-admin", version.ref = "firebase" }
+
+# google
+# google-api-client = { module = "com.google.api-client:google-api-client", version.ref = "google-api-client" }
 
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 

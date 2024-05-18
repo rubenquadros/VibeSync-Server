@@ -5,7 +5,7 @@ import io.github.rubenquadros.kovibes.api.response.SpotifyApiResponse
 import io.github.rubenquadros.vibesync.server.configureResources
 import io.github.rubenquadros.vibesync.server.configureRouting
 import io.github.rubenquadros.vibesync.server.configureSerialization
-import io.github.rubenquadros.vibesync.test.data.errorResponse
+import io.github.rubenquadros.vibesync.test.data.spotifyErrorResponse
 import io.github.rubenquadros.vibesync.test.startTestApplication
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -44,7 +44,7 @@ fun cleanupKoin(vararg modules: Module) {
 
 fun <R>getSpotifyResponse(isError: Boolean, response: SpotifyApiResponse.Success<R>): SpotifyApiResponse<R, ErrorBody> {
     return if (isError) {
-        errorResponse
+        spotifyErrorResponse
     } else {
         response
     }

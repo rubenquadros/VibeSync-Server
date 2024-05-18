@@ -2,12 +2,12 @@ package io.github.rubenquadros.vibesync.server.album
 
 import io.github.rubenquadros.kovibes.api.response.SpotifyApiResponse
 import io.github.rubenquadros.vibesync.kovibes.SpotifyApi
+import io.github.rubenquadros.vibesync.kovibes.toImage
+import io.github.rubenquadros.vibesync.kovibes.toTrackInfo
 import io.github.rubenquadros.vibesync.server.artist.toArtistInfo
 import io.github.rubenquadros.vibesync.server.model.Response
 import io.github.rubenquadros.vibesync.server.model.getErrorResponse
 import io.github.rubenquadros.vibesync.server.model.getSuccessResponse
-import io.github.rubenquadros.vibesync.server.model.toImage
-import io.github.rubenquadros.vibesync.server.model.toTrackInfo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.core.annotation.Single

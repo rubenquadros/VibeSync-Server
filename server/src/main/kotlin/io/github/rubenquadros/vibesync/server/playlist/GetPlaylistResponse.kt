@@ -1,8 +1,8 @@
 package io.github.rubenquadros.vibesync.server.playlist
 
 import io.github.rubenquadros.kovibes.api.response.Playlist
-import io.github.rubenquadros.vibesync.server.model.Image
-import io.github.rubenquadros.vibesync.server.model.toImage
+import io.github.rubenquadros.shared.models.Image
+import io.github.rubenquadros.vibesync.kovibes.toImage
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

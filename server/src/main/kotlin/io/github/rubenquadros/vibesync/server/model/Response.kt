@@ -14,9 +14,9 @@ data class Error(
     val message: String
 )
 
-fun getServerErrorResponse(message: String) = Response(
-    status = HttpStatusCode.InternalServerError,
-    data = Error(message = message)
+fun getErrorResponse(message: String, status: HttpStatusCode) = Response(
+    status = status,
+    data = Error(message)
 )
 
 fun getErrorResponse(errorBody: ErrorBody) = with(errorBody.error) {
@@ -29,4 +29,9 @@ fun getErrorResponse(errorBody: ErrorBody) = with(errorBody.error) {
 fun getSuccessResponse(data: Any) = Response(
     status = HttpStatusCode.OK,
     data = data
+)
+
+fun getEmptyBodySuccessResponse() = Response(
+    status = HttpStatusCode.OK,
+    data = "Success"
 )

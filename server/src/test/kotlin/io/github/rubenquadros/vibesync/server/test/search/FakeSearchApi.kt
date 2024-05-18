@@ -1,5 +1,6 @@
 package io.github.rubenquadros.vibesync.server.test.search
 
+import io.github.rubenquadros.vibesync.kovibes.toTrackInfo
 import io.github.rubenquadros.vibesync.server.album.toAlbumResponse
 import io.github.rubenquadros.vibesync.server.artist.toArtistInfo
 import io.github.rubenquadros.vibesync.server.model.GetPaginatedResponse
@@ -8,12 +9,10 @@ import io.github.rubenquadros.vibesync.server.model.SearchAlbums
 import io.github.rubenquadros.vibesync.server.model.SearchArtists
 import io.github.rubenquadros.vibesync.server.model.SearchPlaylists
 import io.github.rubenquadros.vibesync.server.model.SearchTracks
-import io.github.rubenquadros.vibesync.server.model.getServerErrorResponse
 import io.github.rubenquadros.vibesync.server.model.getSuccessResponse
-import io.github.rubenquadros.vibesync.server.model.toTrackInfo
 import io.github.rubenquadros.vibesync.server.playlist.toPlaylistResponse
 import io.github.rubenquadros.vibesync.server.search.SearchApi
-import io.github.rubenquadros.vibesync.server.test.errorMessage
+import io.github.rubenquadros.vibesync.server.test.apiErrorResponse
 import io.github.rubenquadros.vibesync.test.data.geTracks
 import io.github.rubenquadros.vibesync.test.data.getAlbums
 import io.github.rubenquadros.vibesync.test.data.getArtists
@@ -27,7 +26,7 @@ class FakeSearchApi : SearchApi {
 
     override suspend fun searchTrack(query: String, offset: Int, limit: Int): Response {
         return if (isError) {
-            getServerErrorResponse(errorMessage)
+            apiErrorResponse
         } else {
             getSuccessResponse(
                 data = GetPaginatedResponse(
@@ -40,7 +39,7 @@ class FakeSearchApi : SearchApi {
 
     override suspend fun searchArtist(query: String, offset: Int, limit: Int): Response {
         return if (isError) {
-            getServerErrorResponse(errorMessage)
+            apiErrorResponse
         } else {
             getSuccessResponse(
                 data = GetPaginatedResponse(
@@ -53,7 +52,7 @@ class FakeSearchApi : SearchApi {
 
     override suspend fun searchAlbum(query: String, offset: Int, limit: Int): Response {
         return if (isError) {
-            getServerErrorResponse(errorMessage)
+            apiErrorResponse
         } else {
             getSuccessResponse(
                 data = GetPaginatedResponse(
@@ -66,7 +65,7 @@ class FakeSearchApi : SearchApi {
 
     override suspend fun searchPlaylist(query: String, offset: Int, limit: Int): Response {
         return if (isError) {
-            getServerErrorResponse(errorMessage)
+            apiErrorResponse
         } else {
             getSuccessResponse(
                 data = GetPaginatedResponse(

@@ -18,6 +18,8 @@ dependencies {
     implementation(libs.ktor.serialization)
 
     api(libs.kovibes.jvm)
+
+    api(project(":shared"))
 }
 
 ksp {

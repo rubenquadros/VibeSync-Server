@@ -12,6 +12,10 @@ inline fun <reified T> Response.assertSuccess(block: (data: T) -> Unit) {
     block(data as T)
 }
 
+fun Response.assertSuccessNoBody() {
+    assert(status == HttpStatusCode.OK)
+}
+
 fun Response.assertSpotifyFailure() {
     assert(status.value == 500)
     assert(status.description == "Something went wrong.")

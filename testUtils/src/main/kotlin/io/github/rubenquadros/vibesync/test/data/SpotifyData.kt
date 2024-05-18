@@ -17,7 +17,7 @@ import io.github.rubenquadros.kovibes.api.response.SpotifyApiResponse
 import io.github.rubenquadros.kovibes.api.response.Track
 import io.github.rubenquadros.kovibes.api.response.Tracks
 
-val errorResponse = SpotifyApiResponse.Error(
+val spotifyErrorResponse = SpotifyApiResponse.Error(
     body = ErrorBody(
         error = Error(
             status = 500, message = "Something went wrong."

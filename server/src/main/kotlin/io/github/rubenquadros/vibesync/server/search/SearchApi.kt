@@ -2,6 +2,7 @@ package io.github.rubenquadros.vibesync.server.search
 
 import io.github.rubenquadros.kovibes.api.response.SpotifyApiResponse
 import io.github.rubenquadros.vibesync.kovibes.SpotifyApi
+import io.github.rubenquadros.vibesync.kovibes.toTrackInfo
 import io.github.rubenquadros.vibesync.server.album.toAlbumResponse
 import io.github.rubenquadros.vibesync.server.artist.toArtistInfo
 import io.github.rubenquadros.vibesync.server.model.GetPaginatedResponse
@@ -12,7 +13,6 @@ import io.github.rubenquadros.vibesync.server.model.SearchPlaylists
 import io.github.rubenquadros.vibesync.server.model.SearchTracks
 import io.github.rubenquadros.vibesync.server.model.getErrorResponse
 import io.github.rubenquadros.vibesync.server.model.getSuccessResponse
-import io.github.rubenquadros.vibesync.server.model.toTrackInfo
 import io.github.rubenquadros.vibesync.server.playlist.toPlaylistResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

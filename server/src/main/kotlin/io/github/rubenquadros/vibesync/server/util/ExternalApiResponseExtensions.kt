@@ -5,7 +5,6 @@ import io.github.rubenquadros.kovibes.api.response.SpotifyApiResponse
 import io.github.rubenquadros.vibesync.firestore.model.FirestoreApiResponse
 import io.github.rubenquadros.vibesync.server.model.Response
 import io.github.rubenquadros.vibesync.server.model.getErrorResponse
-import io.github.rubenquadros.vibesync.server.model.getServerErrorResponse
 
 fun List<SpotifyApiResponse<*, ErrorBody>>.toSpotifySuccessData(block: (successResults: List<Any>) -> Response): Response {
 
@@ -27,7 +26,10 @@ fun List<FirestoreApiResponse<*>>.toFirestoreSuccessData(block: (successResults:
 
     forEach { firestoreApiResponse: FirestoreApiResponse<*> ->
         if (firestoreApiResponse is FirestoreApiResponse.Error) {
-            return getServerErrorResponse(message = firestoreApiResponse.throwable?.message.toString())
+            return getErrorResponse(
+                status = firestoreApiResponse.statusCode,
+                message = firestoreApiResponse.throwable.message.toString()
+            )
         } else {
             successResults.add((firestoreApiResponse as FirestoreApiResponse.Success).data!!)
         }

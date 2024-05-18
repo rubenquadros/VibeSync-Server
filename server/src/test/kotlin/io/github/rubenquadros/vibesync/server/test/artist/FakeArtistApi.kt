@@ -1,14 +1,13 @@
 package io.github.rubenquadros.vibesync.server.test.artist
 
+import io.github.rubenquadros.vibesync.kovibes.toMediaInfo
+import io.github.rubenquadros.vibesync.kovibes.toTrackInfo
 import io.github.rubenquadros.vibesync.server.artist.ArtistApi
 import io.github.rubenquadros.vibesync.server.artist.GetArtistResponse
 import io.github.rubenquadros.vibesync.server.artist.toArtistInfo
 import io.github.rubenquadros.vibesync.server.model.Response
-import io.github.rubenquadros.vibesync.server.model.getServerErrorResponse
 import io.github.rubenquadros.vibesync.server.model.getSuccessResponse
-import io.github.rubenquadros.vibesync.server.model.toMediaInfo
-import io.github.rubenquadros.vibesync.server.model.toTrackInfo
-import io.github.rubenquadros.vibesync.server.test.errorMessage
+import io.github.rubenquadros.vibesync.server.test.apiErrorResponse
 import io.github.rubenquadros.vibesync.test.data.albumsResponse
 import io.github.rubenquadros.vibesync.test.data.artistResponse
 import io.github.rubenquadros.vibesync.test.data.artistTopTracksResponse
@@ -22,7 +21,7 @@ class FakeArtistApi : ArtistApi {
 
     override suspend fun getArtist(id: String): Response {
         return if (isError) {
-            getServerErrorResponse(errorMessage)
+            apiErrorResponse
         } else {
             getSuccessResponse(
                 data = GetArtistResponse(

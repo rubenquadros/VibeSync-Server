@@ -1,5 +1,6 @@
 package io.github.rubenquadros.vibesync.server.model
 
+import io.github.rubenquadros.shared.models.TrackInfo
 import io.github.rubenquadros.vibesync.server.album.GetAlbumResponse
 import io.github.rubenquadros.vibesync.server.playlist.GetPlaylistResponse
 import kotlinx.serialization.Serializable

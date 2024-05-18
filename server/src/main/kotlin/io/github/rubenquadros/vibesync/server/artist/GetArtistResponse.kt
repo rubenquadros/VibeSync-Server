@@ -1,10 +1,10 @@
 package io.github.rubenquadros.vibesync.server.artist
 
 import io.github.rubenquadros.kovibes.api.response.Artist
+import io.github.rubenquadros.shared.models.MediaInfo
+import io.github.rubenquadros.shared.models.TrackInfo
+import io.github.rubenquadros.vibesync.kovibes.toImage
 import io.github.rubenquadros.vibesync.server.model.ArtistInfo
-import io.github.rubenquadros.vibesync.server.model.MediaInfo
-import io.github.rubenquadros.vibesync.server.model.TrackInfo
-import io.github.rubenquadros.vibesync.server.model.toImage
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

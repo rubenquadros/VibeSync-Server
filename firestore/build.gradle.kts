@@ -18,6 +18,8 @@ dependencies {
     implementation(libs.ktor.serialization)
 
     implementation(libs.firebase.admin)
+
+    api(project(":shared"))
 }
 
 ksp {
@@ -28,6 +30,7 @@ ksp {
 tasks.test {
     useJUnitPlatform()
 }
+
 kotlin {
     jvmToolchain(17)
 }

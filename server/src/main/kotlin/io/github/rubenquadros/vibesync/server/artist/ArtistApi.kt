@@ -5,10 +5,10 @@ import io.github.rubenquadros.kovibes.api.response.Artist
 import io.github.rubenquadros.kovibes.api.response.ArtistTopTracks
 import io.github.rubenquadros.kovibes.api.response.RelatedArtists
 import io.github.rubenquadros.vibesync.kovibes.SpotifyApi
+import io.github.rubenquadros.vibesync.kovibes.toMediaInfo
+import io.github.rubenquadros.vibesync.kovibes.toTrackInfo
 import io.github.rubenquadros.vibesync.server.model.Response
 import io.github.rubenquadros.vibesync.server.model.getSuccessResponse
-import io.github.rubenquadros.vibesync.server.model.toMediaInfo
-import io.github.rubenquadros.vibesync.server.model.toTrackInfo
 import io.github.rubenquadros.vibesync.server.util.toSpotifySuccessData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async

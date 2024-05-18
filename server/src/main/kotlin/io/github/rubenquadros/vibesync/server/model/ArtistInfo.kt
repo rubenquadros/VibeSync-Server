@@ -1,5 +1,6 @@
 package io.github.rubenquadros.vibesync.server.model
 
+import io.github.rubenquadros.shared.models.Image
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

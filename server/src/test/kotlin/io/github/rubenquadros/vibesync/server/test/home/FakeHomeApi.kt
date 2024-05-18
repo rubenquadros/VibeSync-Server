@@ -4,9 +4,8 @@ import io.github.rubenquadros.vibesync.server.home.HomeApi
 import io.github.rubenquadros.vibesync.server.home.LandingPageResponse
 import io.github.rubenquadros.vibesync.server.home.toTopEntity
 import io.github.rubenquadros.vibesync.server.model.Response
-import io.github.rubenquadros.vibesync.server.model.getServerErrorResponse
 import io.github.rubenquadros.vibesync.server.model.getSuccessResponse
-import io.github.rubenquadros.vibesync.server.test.errorMessage
+import io.github.rubenquadros.vibesync.server.test.apiErrorResponse
 import io.github.rubenquadros.vibesync.test.data.featuredPlaylistsResponse
 import io.github.rubenquadros.vibesync.test.data.topEntity
 
@@ -18,7 +17,7 @@ class FakeHomeApi : HomeApi {
 
     override suspend fun getHomePage(): Response {
         return if (isError) {
-            getServerErrorResponse(errorMessage)
+            apiErrorResponse
         } else {
             getSuccessResponse(
                 data = LandingPageResponse(
