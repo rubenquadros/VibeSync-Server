@@ -8,52 +8,52 @@ import io.github.rubenquadros.vibesync.firestore.model.PlaylistInfo
 import io.github.rubenquadros.vibesync.firestore.model.TopEntity
 import io.github.rubenquadros.vibesync.firestore.model.UserProfile
 import io.github.rubenquadros.vibesync.firestore.model.getErrorResponse
+import io.github.rubenquadros.vibesync.test.TestApi
 import io.github.rubenquadros.vibesync.test.data.firestoreErrorResponse
-import io.github.rubenquadros.vibesync.test.data.firestoreSuccessNoBodyResponse
-import io.github.rubenquadros.vibesync.test.data.likedAlbumsResponse
-import io.github.rubenquadros.vibesync.test.data.likedTracksResponse
-import io.github.rubenquadros.vibesync.test.data.topEntityResponse
+import io.github.rubenquadros.vibesync.test.data.likedAlbums
+import io.github.rubenquadros.vibesync.test.data.topEntity
+import io.github.rubenquadros.vibesync.test.data.tracks
 import io.github.rubenquadros.vibesync.test.data.unknownUser
-import io.github.rubenquadros.vibesync.test.data.userPlaylistsResponse
+import io.github.rubenquadros.vibesync.test.data.userPlaylists
 import io.github.rubenquadros.vibesync.test.data.userProfileResponse
 import io.ktor.http.HttpStatusCode
 
-class FakeFirestoreApi : FirestoreApi {
-
-    companion object {
-        var isError: Boolean = false
-    }
-
-    override suspend fun getTopArtists(): FirestoreApiResponse<List<TopEntity>> {
+abstract class TestFirestoreApi : TestApi(), FirestoreApi {
+    fun <R>getFirestoreResponse(
+        response: R
+    ): FirestoreApiResponse<R> {
         return if (isError) {
             firestoreErrorResponse
         } else {
-            topEntityResponse
+            FirestoreApiResponse.Success(response)
         }
+    }
+
+    fun getFirestoreNoBodyResponse(): FirestoreApiResponse<Nothing> {
+        return if (isError) {
+            firestoreErrorResponse
+        } else {
+            FirestoreApiResponse.SuccessNoBody
+        }
+    }
+}
+
+class FakeFirestoreApi : TestFirestoreApi() {
+
+    override suspend fun getTopArtists(): FirestoreApiResponse<List<TopEntity>> {
+        return getFirestoreResponse(topEntity)
     }
 
     override suspend fun getTopTracks(): FirestoreApiResponse<List<TopEntity>> {
-        return if (isError) {
-            firestoreErrorResponse
-        } else {
-            topEntityResponse
-        }
+        return getFirestoreResponse(topEntity)
     }
 
     override suspend fun getTopAlbums(): FirestoreApiResponse<List<TopEntity>> {
-        return if (isError) {
-            firestoreErrorResponse
-        } else {
-            topEntityResponse
-        }
+        return getFirestoreResponse(topEntity)
     }
 
     override suspend fun getRecentTracks(): FirestoreApiResponse<List<TopEntity>> {
-        return if (isError) {
-            firestoreErrorResponse
-        } else {
-            topEntityResponse
-        }
+        return getFirestoreResponse(topEntity)
     }
 
     override suspend fun getUserProfile(id: String): FirestoreApiResponse<UserProfile> {
@@ -65,83 +65,43 @@ class FakeFirestoreApi : FirestoreApi {
     }
 
     override suspend fun likeTrack(userId: String, trackInfo: TrackInfo): FirestoreApiResponse<Nothing> {
-        return if (isError) {
-            firestoreErrorResponse
-        } else {
-            firestoreSuccessNoBodyResponse
-        }
+        return getFirestoreNoBodyResponse()
     }
 
     override suspend fun unlikeTrack(userId: String, trackId: String): FirestoreApiResponse<Nothing> {
-        return if (isError) {
-            firestoreErrorResponse
-        } else {
-            firestoreSuccessNoBodyResponse
-        }
+        return getFirestoreNoBodyResponse()
     }
 
     override suspend fun likeAlbum(userId: String, mediaInfo: MediaInfo): FirestoreApiResponse<Nothing> {
-        return if (isError) {
-            firestoreErrorResponse
-        } else {
-            firestoreSuccessNoBodyResponse
-        }
+        return getFirestoreNoBodyResponse()
     }
 
     override suspend fun unlikeAlbum(userId: String, albumId: String): FirestoreApiResponse<Nothing> {
-        return if (isError) {
-            firestoreErrorResponse
-        } else {
-            firestoreSuccessNoBodyResponse
-        }
+        return getFirestoreNoBodyResponse()
     }
 
     override suspend fun likePlaylist(userId: String, mediaInfo: MediaInfo): FirestoreApiResponse<Nothing> {
-        return if (isError) {
-            firestoreErrorResponse
-        } else {
-            firestoreSuccessNoBodyResponse
-        }
+        return getFirestoreNoBodyResponse()
     }
 
     override suspend fun unlikePlaylist(userId: String, playlistId: String): FirestoreApiResponse<Nothing> {
-        return if (isError) {
-            firestoreErrorResponse
-        } else {
-            firestoreSuccessNoBodyResponse
-        }
+        return getFirestoreNoBodyResponse()
     }
 
     override suspend fun getLikedTracks(userId: String): FirestoreApiResponse<List<TrackInfo>> {
-        return if (isError) {
-            firestoreErrorResponse
-        } else {
-            likedTracksResponse
-        }
+        return getFirestoreResponse(tracks)
     }
 
     override suspend fun getLikedAlbums(userId: String): FirestoreApiResponse<List<MediaInfo>> {
-        return if (isError) {
-            firestoreErrorResponse
-        } else {
-            likedAlbumsResponse
-        }
+        return getFirestoreResponse(likedAlbums)
     }
 
     override suspend fun createPlaylist(userId: String, userName: String, playlistName: String, trackInfo: TrackInfo): FirestoreApiResponse<Nothing> {
-        return if (isError) {
-            firestoreErrorResponse
-        } else {
-            firestoreSuccessNoBodyResponse
-        }
+        return getFirestoreNoBodyResponse()
     }
 
     override suspend fun getUserPlaylists(userId: String): FirestoreApiResponse<List<PlaylistInfo>> {
-        return if (isError) {
-            firestoreErrorResponse
-        } else {
-            userPlaylistsResponse
-        }
+        return getFirestoreResponse(userPlaylists)
     }
 
     override suspend fun addTrackToPlaylist(
@@ -149,34 +109,18 @@ class FakeFirestoreApi : FirestoreApi {
         playlistId: String,
         trackInfo: TrackInfo
     ): FirestoreApiResponse<Nothing> {
-        return if (isError) {
-            firestoreErrorResponse
-        } else {
-            firestoreSuccessNoBodyResponse
-        }
+        return getFirestoreNoBodyResponse()
     }
 
     override suspend fun removeTracksFromPlaylist(userId: String, playlistId: String, trackIds: List<String>): FirestoreApiResponse<Nothing> {
-        return if (isError) {
-            firestoreErrorResponse
-        } else {
-            firestoreSuccessNoBodyResponse
-        }
+        return getFirestoreNoBodyResponse()
     }
 
     override suspend fun getPlaylistTracks(userId: String, playlistId: String): FirestoreApiResponse<List<TrackInfo>> {
-        return if (isError) {
-            firestoreErrorResponse
-        } else {
-            likedTracksResponse
-        }
+        return getFirestoreResponse(tracks)
     }
 
     override suspend fun deletePlaylist(userId: String, playlistId: String): FirestoreApiResponse<Nothing> {
-        return if (isError) {
-            firestoreErrorResponse
-        } else {
-            firestoreSuccessNoBodyResponse
-        }
+        return getFirestoreNoBodyResponse()
     }
 }

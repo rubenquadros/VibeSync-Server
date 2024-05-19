@@ -19,8 +19,9 @@ import kotlin.test.Test
 
 class HomeRouteTest: KoinTest {
 
+    private val fakeHomeApi = FakeHomeApi()
     private val mockModule = module {
-        single<HomeApi> { FakeHomeApi() }
+        single<HomeApi> { fakeHomeApi }
     }
     @BeforeTest
     fun setup() {
@@ -29,7 +30,7 @@ class HomeRouteTest: KoinTest {
 
     @Test
     fun `when data is fetched successfully then a success response is received`() = testApplication {
-        FakeHomeApi.isError = false
+        fakeHomeApi.isError = false
 
         val response = it.get("/landing")
 
@@ -42,13 +43,13 @@ class HomeRouteTest: KoinTest {
             assert(topTracks.size == topEntity.size)
             assert(recentTracks?.size == topEntity.size)
             assert(topAlbums.size == topEntity.size)
-            assert(featuredPlaylists.size == featuredPlaylistsResponse.result.items.size)
+            assert(featuredPlaylists.size == featuredPlaylistsResponse.items.size)
         }
     }
 
     @Test
     fun `when there is an error in data fetching then an error response is received`() = testApplication {
-        FakeHomeApi.isError = true
+        fakeHomeApi.isError = true
 
         val response = it.get("/landing")
 

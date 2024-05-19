@@ -9,70 +9,49 @@ import io.github.rubenquadros.vibesync.server.model.SearchAlbums
 import io.github.rubenquadros.vibesync.server.model.SearchArtists
 import io.github.rubenquadros.vibesync.server.model.SearchPlaylists
 import io.github.rubenquadros.vibesync.server.model.SearchTracks
-import io.github.rubenquadros.vibesync.server.model.getSuccessResponse
 import io.github.rubenquadros.vibesync.server.playlist.toPlaylistResponse
 import io.github.rubenquadros.vibesync.server.search.SearchApi
-import io.github.rubenquadros.vibesync.server.test.apiErrorResponse
+import io.github.rubenquadros.vibesync.server.test.FakeApi
 import io.github.rubenquadros.vibesync.test.data.geTracks
 import io.github.rubenquadros.vibesync.test.data.getAlbums
 import io.github.rubenquadros.vibesync.test.data.getArtists
 import io.github.rubenquadros.vibesync.test.data.getPlaylists
 
-class FakeSearchApi : SearchApi {
-
-    companion object {
-        var isError: Boolean = false
-    }
+class FakeSearchApi : SearchApi, FakeApi() {
 
     override suspend fun searchTrack(query: String, offset: Int, limit: Int): Response {
-        return if (isError) {
-            apiErrorResponse
-        } else {
-            getSuccessResponse(
-                data = GetPaginatedResponse(
-                    isNext = true,
-                    content = SearchTracks(geTracks().map { it.toTrackInfo() })
-                )
+        return getTestApiResponse(
+            GetPaginatedResponse(
+                isNext = true,
+                content = SearchTracks(geTracks().map { it.toTrackInfo() })
             )
-        }
+        )
     }
 
     override suspend fun searchArtist(query: String, offset: Int, limit: Int): Response {
-        return if (isError) {
-            apiErrorResponse
-        } else {
-            getSuccessResponse(
-                data = GetPaginatedResponse(
-                    isNext = true,
-                    content = SearchArtists(getArtists().map { it.toArtistInfo() })
-                )
+        return getTestApiResponse(
+            GetPaginatedResponse(
+                isNext = true,
+                content = SearchArtists(getArtists().map { it.toArtistInfo() })
             )
-        }
+        )
     }
 
     override suspend fun searchAlbum(query: String, offset: Int, limit: Int): Response {
-        return if (isError) {
-            apiErrorResponse
-        } else {
-            getSuccessResponse(
-                data = GetPaginatedResponse(
-                    isNext = true,
-                    content = SearchAlbums(getAlbums().map { it.toAlbumResponse() })
-                )
+        return getTestApiResponse(
+            GetPaginatedResponse(
+                isNext = true,
+                content = SearchAlbums(getAlbums().map { it.toAlbumResponse() })
             )
-        }
+        )
     }
 
     override suspend fun searchPlaylist(query: String, offset: Int, limit: Int): Response {
-        return if (isError) {
-            apiErrorResponse
-        } else {
-            getSuccessResponse(
-                data = GetPaginatedResponse(
-                    isNext = true,
-                    content = SearchPlaylists(getPlaylists().map { it.toPlaylistResponse() })
-                )
+        return getTestApiResponse(
+            GetPaginatedResponse(
+                isNext = true,
+                content = SearchPlaylists(getPlaylists().map { it.toPlaylistResponse() })
             )
-        }
+        )
     }
 }

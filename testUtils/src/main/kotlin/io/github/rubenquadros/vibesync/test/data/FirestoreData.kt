@@ -1,6 +1,5 @@
 package io.github.rubenquadros.vibesync.test.data
 
-import io.github.rubenquadros.vibesync.firestore.model.FirestoreApiResponse
 import io.github.rubenquadros.vibesync.firestore.model.PlaylistInfo
 import io.github.rubenquadros.vibesync.firestore.model.TopEntity
 import io.github.rubenquadros.vibesync.firestore.model.UserProfile
@@ -15,19 +14,9 @@ val firestoreErrorResponse = getErrorResponse(
 
 const val unknownUser = "12345"
 
-val firestoreSuccessNoBodyResponse = FirestoreApiResponse.SuccessNoBody
-
-val topEntityResponse = getSuccessResponse(topEntity)
-
 val userProfileResponse = getSuccessResponse(userProfile)
 
-val likedTracksResponse = getSuccessResponse(listOf(trackInfo))
-
-val likedAlbumsResponse = getSuccessResponse(listOf(mediaInfo))
-
-val userPlaylistsResponse = getSuccessResponse(listOf(userPlaylist))
-
-val topEntity get() = listOf(
+val topEntity = listOf(
     TopEntity(
         id = "123",
         name = "Top Entity1",
@@ -39,6 +28,12 @@ val topEntity get() = listOf(
         image = "https://topentity2.image2.png"
     )
 )
+
+val tracks = listOf(trackInfo)
+
+val userPlaylists = listOf(userPlaylist)
+
+val likedAlbums = listOf(mediaInfo)
 
 val userProfile get() = UserProfile(
     id = "234",

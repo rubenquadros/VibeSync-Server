@@ -14,8 +14,9 @@ import kotlin.test.Test
 
 class UnlikeRouteTest {
 
+    private val fakeUnlikeApi = FakeUnlikeApi()
     private val mockModule = module {
-        single<UnlikeApi> { FakeUnlikeApi() }
+        single<UnlikeApi> { fakeUnlikeApi }
     }
 
     @BeforeTest
@@ -25,7 +26,7 @@ class UnlikeRouteTest {
 
     @Test
     fun `when a track is unliked successfully then a success response is received`() = testApplication {
-        FakeUnlikeApi.isError = false
+        fakeUnlikeApi.isError = false
 
         val response = it.delete("user/1234/unlike-track/5678")
 
@@ -34,7 +35,7 @@ class UnlikeRouteTest {
 
     @Test
     fun `when there is an error in unliking a track then an error response is received`() = testApplication {
-        FakeUnlikeApi.isError = true
+        fakeUnlikeApi.isError = true
 
         val response = it.delete("user/1234/unlike-track/5678")
 
@@ -43,7 +44,7 @@ class UnlikeRouteTest {
 
     @Test
     fun `when an album is unliked successfully then a success response is received`() = testApplication {
-        FakeUnlikeApi.isError = false
+        fakeUnlikeApi.isError = false
 
         val response = it.delete("user/1234/unlike-album/5678")
 
@@ -52,7 +53,7 @@ class UnlikeRouteTest {
 
     @Test
     fun `when there is an error in unliking an album then an error response is received`() = testApplication {
-        FakeUnlikeApi.isError = true
+        fakeUnlikeApi.isError = true
 
         val response = it.delete("user/1234/unlike-album/5678")
 
@@ -61,7 +62,7 @@ class UnlikeRouteTest {
 
     @Test
     fun `when a playlist is unliked successfully then a success response is received`() = testApplication {
-        FakeUnlikeApi.isError = false
+        fakeUnlikeApi.isError = false
 
         val response = it.delete("user/1234/unlike-playlist/5678")
 
@@ -70,7 +71,7 @@ class UnlikeRouteTest {
 
     @Test
     fun `when there is an error in unliking a playlist then an error response is received`() = testApplication {
-        FakeUnlikeApi.isError = true
+        fakeUnlikeApi.isError = true
 
         val response = it.delete("user/1234/unlike-playlist/5678")
 

@@ -8,7 +8,7 @@ import io.github.rubenquadros.vibesync.server.test.cleanupKoin
 import io.github.rubenquadros.vibesync.server.test.setupKoin
 import io.github.rubenquadros.vibesync.server.test.testApplication
 import io.github.rubenquadros.vibesync.test.data.albumsResponse
-import io.github.rubenquadros.vibesync.test.data.artistResponse
+import io.github.rubenquadros.vibesync.test.data.artist1
 import io.github.rubenquadros.vibesync.test.data.artistTopTracksResponse
 import io.github.rubenquadros.vibesync.test.data.relatedArtistsResponse
 import io.ktor.client.call.body
@@ -21,8 +21,9 @@ import kotlin.test.Test
 
 class ArtistRouteTest : KoinTest {
 
+    private val fakeArtistApi = FakeArtistApi()
     private val mockModule = module {
-        single<ArtistApi> { FakeArtistApi() }
+        single<ArtistApi> { fakeArtistApi }
     }
 
     @BeforeTest
@@ -32,7 +33,7 @@ class ArtistRouteTest : KoinTest {
 
     @Test
     fun `when artist data is fetched successfully then a success response is received`() = testApplication {
-        FakeArtistApi.isError = false
+        fakeArtistApi.isError = false
 
         val response = it.get("artist/123")
 
@@ -41,16 +42,16 @@ class ArtistRouteTest : KoinTest {
         val body = response.body<GetArtistResponse>()
 
         with(body) {
-            assert(artistInfo.id == artistResponse.result.id)
-            assert(albums.size == albumsResponse.result.items.size)
-            assert(topTracks.size == artistTopTracksResponse.result.tracks.size)
-            assert(relatedArtists.size == relatedArtistsResponse.result.artists.size)
+            assert(artistInfo.id == artist1.id)
+            assert(albums.size == albumsResponse.items.size)
+            assert(topTracks.size == artistTopTracksResponse.tracks.size)
+            assert(relatedArtists.size == relatedArtistsResponse.artists.size)
         }
     }
 
     @Test
     fun `when there is error in fetching artist data from spotify then an error response is received`() = testApplication {
-        FakeArtistApi.isError = true
+        fakeArtistApi.isError = true
 
         val response = it.get("artist/123")
 

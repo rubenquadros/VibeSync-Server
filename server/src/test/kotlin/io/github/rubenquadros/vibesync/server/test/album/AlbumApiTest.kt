@@ -6,28 +6,29 @@ import io.github.rubenquadros.vibesync.server.album.GetAlbumTracksResponse
 import io.github.rubenquadros.vibesync.server.test.FakeSpotifyApi
 import io.github.rubenquadros.vibesync.server.test.assertSpotifyFailure
 import io.github.rubenquadros.vibesync.server.test.assertSuccess
-import io.github.rubenquadros.vibesync.test.data.albumResponse
+import io.github.rubenquadros.vibesync.test.data.album1
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 
 class AlbumApiTest {
 
-    private val albumApi = AlbumApiImpl(FakeSpotifyApi())
+    private val fakeSpotifyApi = FakeSpotifyApi()
+    private val albumApi = AlbumApiImpl(fakeSpotifyApi)
 
     @Test
     fun `when album info is fetched successfully then a success response is received`() = runTest {
-        FakeSpotifyApi.isError = false
+        fakeSpotifyApi.isError = false
 
         val response = albumApi.getAlbum("123")
 
         response.assertSuccess<GetAlbumResponse> {
-            assert(it.id == albumResponse.result.id)
+            assert(it.id == album1.id)
         }
     }
 
     @Test
     fun `when there is an error in fetching spotify album data then an error response is received`() = runTest {
-        FakeSpotifyApi.isError = true
+        fakeSpotifyApi.isError = true
 
         val response = albumApi.getAlbum("123")
 
@@ -36,7 +37,7 @@ class AlbumApiTest {
 
     @Test
     fun `when album tracks are fetched successfully then a success response is received`() = runTest {
-        FakeSpotifyApi.isError = false
+        fakeSpotifyApi.isError = false
 
         val response = albumApi.getAlbumTracks("123", 0, 20)
 
@@ -47,7 +48,7 @@ class AlbumApiTest {
 
     @Test
     fun `when there is an error in fetching spotify album tracks data then an error response is received`() = runTest {
-        FakeSpotifyApi.isError = true
+        fakeSpotifyApi.isError = true
 
         val response = albumApi.getAlbumTracks("123", 0, 20)
 

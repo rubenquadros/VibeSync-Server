@@ -4,12 +4,12 @@ import com.google.cloud.firestore.DocumentSnapshot
 import io.github.rubenquadros.shared.models.Image
 
 @Suppress("UNCHECKED_CAST")
-fun DocumentSnapshot.getDataMap(): Map<String, Any> {
+internal fun DocumentSnapshot.getDataMap(): Map<String, Any> {
     return this["data"] as Map<String, Any>
 }
 
 @Suppress("UNCHECKED_CAST")
-fun DocumentSnapshot.getImages(): List<Image> {
+internal fun DocumentSnapshot.getImages(): List<Image> {
     return (this["images"] as List<Map<*, *>>).map {
         Image(
             width = (it["width"] as Long).toInt(),
@@ -20,7 +20,7 @@ fun DocumentSnapshot.getImages(): List<Image> {
 }
 
 @Suppress("UNCHECKED_CAST")
-fun Map<String, Any>.getImages(): List<Image> {
+internal fun Map<String, Any>.getImages(): List<Image> {
     return (this["images"] as List<Map<*, *>>).map {
         Image(
             width = (it["width"] as Long).toInt(),

@@ -13,11 +13,12 @@ import kotlin.test.Test
 
 class UserPlaylistApiTest {
 
-    private val userPlaylistApi = UserPlaylistApiImpl(FakeFirestoreApi())
+    private val fakeFirestoreApi = FakeFirestoreApi()
+    private val userPlaylistApi = UserPlaylistApiImpl(fakeFirestoreApi)
 
     @Test
     fun `when a playlist is created successfully then a success response is received`() = runTest {
-        FakeFirestoreApi.isError = false
+        fakeFirestoreApi.isError = false
 
         val response = userPlaylistApi.createPlaylist("1234", "TestUser", "TestPlaylist", trackInfo)
 
@@ -26,7 +27,7 @@ class UserPlaylistApiTest {
 
     @Test
     fun `when there is an error in creating a playlist then an error response is received`() = runTest {
-        FakeFirestoreApi.isError = true
+        fakeFirestoreApi.isError = true
 
         val response = userPlaylistApi.createPlaylist("1234", "TestUser", "TestPlaylist", trackInfo)
 
@@ -35,7 +36,7 @@ class UserPlaylistApiTest {
 
     @Test
     fun `when the user playlists are retrieved successfully then a success response is received`() = runTest {
-        FakeFirestoreApi.isError = false
+        fakeFirestoreApi.isError = false
 
         val response = userPlaylistApi.getUserPlaylists("1234")
 
@@ -46,7 +47,7 @@ class UserPlaylistApiTest {
 
     @Test
     fun `when there is an error in retrieving the user playlists then an error response is received`() = runTest {
-        FakeFirestoreApi.isError = true
+        fakeFirestoreApi.isError = true
 
         val response = userPlaylistApi.getUserPlaylists("1234")
 
@@ -55,7 +56,7 @@ class UserPlaylistApiTest {
 
     @Test
     fun `when a playlist is deleted successfully then a success response is received`() = runTest {
-        FakeFirestoreApi.isError = false
+        fakeFirestoreApi.isError = false
 
         val response = userPlaylistApi.deletePlaylist("1234", "6789")
 
@@ -64,7 +65,7 @@ class UserPlaylistApiTest {
 
     @Test
     fun `when there is an error in deleting a playlist then an error response is received`() = runTest {
-        FakeFirestoreApi.isError = true
+        fakeFirestoreApi.isError = true
 
         val response = userPlaylistApi.deletePlaylist("1234", "6789")
 
@@ -73,7 +74,7 @@ class UserPlaylistApiTest {
 
     @Test
     fun `when a new track is added successfully to a playlist then a success response is received`() = runTest {
-        FakeFirestoreApi.isError = false
+        fakeFirestoreApi.isError = false
 
         val response = userPlaylistApi.addTrackToPlaylist("1234", "6789", trackInfo)
 
@@ -82,7 +83,7 @@ class UserPlaylistApiTest {
 
     @Test
     fun `when there is an error in adding a track to a playlist then an error response is received`() = runTest {
-        FakeFirestoreApi.isError = true
+        fakeFirestoreApi.isError = true
 
         val response = userPlaylistApi.addTrackToPlaylist("1234", "6789", trackInfo)
 
@@ -91,7 +92,7 @@ class UserPlaylistApiTest {
 
     @Test
     fun `when a track is removed successfully then a success response is received`() = runTest {
-        FakeFirestoreApi.isError = false
+        fakeFirestoreApi.isError = false
 
         val response = userPlaylistApi.removeTracksFromPlaylist("1234", "6780", listOf("4567"))
 
@@ -100,7 +101,7 @@ class UserPlaylistApiTest {
 
     @Test
     fun `when there is an error in removing a track from a playlist then an error response is received`() = runTest {
-        FakeFirestoreApi.isError = true
+        fakeFirestoreApi.isError = true
 
         val response = userPlaylistApi.removeTracksFromPlaylist("1234", "6780", listOf("4567"))
 
@@ -109,7 +110,7 @@ class UserPlaylistApiTest {
 
     @Test
     fun `when user playlist tracks are retrieved successfully then a success response is received`() = runTest {
-        FakeFirestoreApi.isError = false
+        fakeFirestoreApi.isError = false
 
         val response = userPlaylistApi.getUserPlaylistTracks("1234", "6789")
 
@@ -120,7 +121,7 @@ class UserPlaylistApiTest {
 
     @Test
     fun `when there is an error in fetching user playlist tracks then an error response is received`() = runTest {
-        FakeFirestoreApi.isError = true
+        fakeFirestoreApi.isError = true
 
         val response = userPlaylistApi.getUserPlaylistTracks("1234", "6789")
 

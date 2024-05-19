@@ -25,8 +25,9 @@ import kotlin.test.Test
 
 class UserPlaylistRouteTest {
 
+    private val fakeUserPlaylistApi = FakeUserPlaylistApi()
     private val mockModule = module {
-        single<UserPlaylistApi> { FakeUserPlaylistApi() }
+        single<UserPlaylistApi> { fakeUserPlaylistApi }
     }
 
     @BeforeTest
@@ -36,7 +37,7 @@ class UserPlaylistRouteTest {
 
     @Test
     fun `when a playlist is created successfully then a success response is received`() = testApplication {
-        FakeUserPlaylistApi.isError = false
+        fakeUserPlaylistApi.isError = false
 
         val response = it.post("/user/1234/create-playlist") {
             setBody(NewPlaylistInfo("Test_playlist", "Test_owner", trackInfo))
@@ -48,7 +49,7 @@ class UserPlaylistRouteTest {
 
     @Test
     fun `when there is an error in creating a playlist then an error response is received`() = testApplication {
-        FakeUserPlaylistApi.isError = true
+        fakeUserPlaylistApi.isError = true
 
         val response = it.post("/user/1234/create-playlist") {
             setBody(NewPlaylistInfo("Test_playlist", "Test_owner", trackInfo))
@@ -60,7 +61,7 @@ class UserPlaylistRouteTest {
 
     @Test
     fun `when a playlist is deleted successfully then a success response is received`() = testApplication {
-        FakeUserPlaylistApi.isError = false
+        fakeUserPlaylistApi.isError = false
 
         val response = it.delete("/user/1234/playlist/1234")
 
@@ -69,7 +70,7 @@ class UserPlaylistRouteTest {
 
     @Test
     fun `when there is an error in deleting a playlist then an error response is received`() = testApplication {
-        FakeUserPlaylistApi.isError = true
+        fakeUserPlaylistApi.isError = true
 
         val response = it.delete("/user/1234/playlist/1234")
 
@@ -78,7 +79,7 @@ class UserPlaylistRouteTest {
 
     @Test
     fun `when a track is added successfully to a playlist then a success response is received`() = testApplication {
-        FakeUserPlaylistApi.isError = false
+        fakeUserPlaylistApi.isError = false
 
         val response = it.patch("/user/1234/update-playlist/1234") {
             setBody(trackInfo)
@@ -90,7 +91,7 @@ class UserPlaylistRouteTest {
 
     @Test
     fun `when there is an error in adding a track to a playlist then an error response is received`() = testApplication {
-        FakeUserPlaylistApi.isError = true
+        fakeUserPlaylistApi.isError = true
 
         val response = it.patch("/user/1234/update-playlist/1234") {
             setBody(trackInfo)
@@ -102,7 +103,7 @@ class UserPlaylistRouteTest {
 
     @Test
     fun `when a track is successfully deleted from a playlist then a success response is received`() = testApplication {
-        FakeUserPlaylistApi.isError = false
+        fakeUserPlaylistApi.isError = false
 
         val response = it.delete("/user/1234/update-playlist/1234") {
             setBody(listOf("1234"))
@@ -114,7 +115,7 @@ class UserPlaylistRouteTest {
 
     @Test
     fun `when there is an error in deleting a track from a playlist then an error response is received`() = testApplication {
-        FakeUserPlaylistApi.isError = true
+        fakeUserPlaylistApi.isError = true
 
         val response = it.delete("/user/1234/update-playlist/1234") {
             setBody(listOf("1234"))
@@ -126,7 +127,7 @@ class UserPlaylistRouteTest {
 
     @Test
     fun `when user playlists are retrieved successfully then a success response is received`() = testApplication {
-        FakeUserPlaylistApi.isError = false
+        fakeUserPlaylistApi.isError = false
 
         val response = it.get("/user/1234/playlists")
 
@@ -139,7 +140,7 @@ class UserPlaylistRouteTest {
 
     @Test
     fun `when there is an error in retrieving user playlists then an error response is received`() = testApplication {
-        FakeUserPlaylistApi.isError = true
+        fakeUserPlaylistApi.isError = true
 
         val response = it.get("/user/1234/playlists")
 
@@ -148,7 +149,7 @@ class UserPlaylistRouteTest {
 
     @Test
     fun `when a playlist tracks are retrieved successfully then a success response is received`() = testApplication {
-        FakeUserPlaylistApi.isError = false
+        fakeUserPlaylistApi.isError = false
 
         val response = it.get("/user/1234/playlist/6789/tracks")
 
@@ -161,7 +162,7 @@ class UserPlaylistRouteTest {
 
     @Test
     fun `when there is an error in fetching user playlist tracks then an error response is received`() = testApplication {
-        FakeUserPlaylistApi.isError = true
+        fakeUserPlaylistApi.isError = true
 
         val response = it.get("/user/1234/playlist/6789/tracks")
 
