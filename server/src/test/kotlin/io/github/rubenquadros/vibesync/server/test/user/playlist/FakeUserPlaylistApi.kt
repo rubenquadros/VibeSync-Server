@@ -2,18 +2,12 @@ package io.github.rubenquadros.vibesync.server.test.user.playlist
 
 import io.github.rubenquadros.shared.models.TrackInfo
 import io.github.rubenquadros.vibesync.server.model.Response
-import io.github.rubenquadros.vibesync.server.model.getEmptyBodySuccessResponse
-import io.github.rubenquadros.vibesync.server.model.getSuccessResponse
-import io.github.rubenquadros.vibesync.server.test.apiErrorResponse
+import io.github.rubenquadros.vibesync.server.test.FakeApi
 import io.github.rubenquadros.vibesync.server.user.playlist.UserPlaylistApi
-import io.github.rubenquadros.vibesync.test.data.trackInfo
-import io.github.rubenquadros.vibesync.test.data.userPlaylist
+import io.github.rubenquadros.vibesync.test.data.tracks
+import io.github.rubenquadros.vibesync.test.data.userPlaylists
 
-class FakeUserPlaylistApi : UserPlaylistApi {
-
-    companion object {
-        var isError: Boolean = false
-    }
+class FakeUserPlaylistApi : UserPlaylistApi, FakeApi() {
 
     override suspend fun createPlaylist(
         userId: String,
@@ -21,35 +15,19 @@ class FakeUserPlaylistApi : UserPlaylistApi {
         playlistName: String,
         trackInfo: TrackInfo
     ): Response {
-        return if (isError) {
-            apiErrorResponse
-        } else {
-            getEmptyBodySuccessResponse()
-        }
+        return getEmptyBodyTestApiResponse()
     }
 
     override suspend fun getUserPlaylists(userId: String): Response {
-        return if (isError) {
-            apiErrorResponse
-        } else {
-            getSuccessResponse(listOf(userPlaylist))
-        }
+        return getTestApiResponse(userPlaylists)
     }
 
     override suspend fun deletePlaylist(userId: String, playlistId: String): Response {
-        return if (isError) {
-            apiErrorResponse
-        } else {
-            getEmptyBodySuccessResponse()
-        }
+        return getEmptyBodyTestApiResponse()
     }
 
     override suspend fun addTrackToPlaylist(userId: String, playlistId: String, trackInfo: TrackInfo): Response {
-        return if (isError) {
-            apiErrorResponse
-        } else {
-            getEmptyBodySuccessResponse()
-        }
+        return getEmptyBodyTestApiResponse()
     }
 
     override suspend fun removeTracksFromPlaylist(
@@ -57,18 +35,10 @@ class FakeUserPlaylistApi : UserPlaylistApi {
         playlistId: String,
         trackIds: List<String>
     ): Response {
-        return if (isError) {
-            apiErrorResponse
-        } else {
-            getEmptyBodySuccessResponse()
-        }
+        return getEmptyBodyTestApiResponse()
     }
 
     override suspend fun getUserPlaylistTracks(userId: String, playlistId: String): Response {
-        return if (isError) {
-            apiErrorResponse
-        } else {
-            getSuccessResponse(listOf(trackInfo))
-        }
+        return getTestApiResponse(tracks)
     }
 }

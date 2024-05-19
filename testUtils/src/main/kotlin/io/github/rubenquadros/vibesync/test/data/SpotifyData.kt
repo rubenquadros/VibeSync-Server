@@ -25,72 +25,49 @@ val spotifyErrorResponse = SpotifyApiResponse.Error(
     )
 )
 
-val featuredPlaylistsResponse = SpotifyApiResponse.Success(
-    result = Playlists(
-        isNext = false,
-        items = getPlaylists()
-    )
+val featuredPlaylistsResponse = Playlists(
+    isNext = false,
+    items = getPlaylists()
 )
 
-val artistResponse = SpotifyApiResponse.Success(
-    result = artist1
+val albumsResponse = Albums(
+    isNext = false,
+    items = getAlbums()
 )
 
-val albumsResponse = SpotifyApiResponse.Success(
-    result = Albums(
-        isNext = false,
-        items = getAlbums()
-    )
+val artistTopTracksResponse = ArtistTopTracks(
+    tracks = geTracks()
 )
 
-val artistTopTracksResponse = SpotifyApiResponse.Success(
-    result = ArtistTopTracks(
-        tracks = geTracks()
-    )
+val relatedArtistsResponse = RelatedArtists(
+    artists = listOf(artist2)
 )
 
-val relatedArtistsResponse = SpotifyApiResponse.Success(
-    result = RelatedArtists(
-        artists = listOf(artist2)
-    )
+val albumTracksResponse = AlbumTracks(
+    isNext = false,
+    items = getAlbumTracks()
 )
 
-val albumResponse = SpotifyApiResponse.Success(
-    result = album1
+val playlistTracksResponse = PlaylistTracks(
+    isNext = false,
+    tracks = listOf(track1, track2)
 )
 
-val albumTracksResponse = SpotifyApiResponse.Success(
-    result = AlbumTracks(
-        isNext = false,
-        items = getAlbumTracks()
-    )
-)
+val searchTrackResponse = Tracks(isNext = true, items = geTracks())
 
-val playlistResponse = SpotifyApiResponse.Success(
-    result = playlist1
-)
+val searchAlbumResponse = Albums(isNext = true, items = getAlbums())
 
-val playlistTracksResponse = SpotifyApiResponse.Success(
-    result = PlaylistTracks(
-        isNext = false,
-        tracks = listOf(track1, track2)
-    )
-)
+val searchArtistResponse = Artists(isNext = true, items = getArtists())
 
-val searchTrackResponse = SpotifyApiResponse.Success(
-    result = Tracks(isNext = true, items = geTracks())
-)
+val searchPlaylistResponse = Playlists(isNext = true, items = getPlaylists())
 
-val searchAlbumResponse = SpotifyApiResponse.Success(
-    result = Albums(isNext = true, items = getAlbums())
-)
-
-val searchArtistResponse = SpotifyApiResponse.Success(
-    result = Artists(isNext = true, items = getArtists())
-)
-
-val searchPlaylistResponse = SpotifyApiResponse.Success(
-    result = Playlists(isNext = true, items = getPlaylists())
+val artist1 get() = Artist(
+    followers = 1000,
+    name = "Taylor Swift",
+    id = "567",
+    popularity = 100,
+    genres = emptyList(),
+    images = emptyList()
 )
 
 val album1 get() = Album(
@@ -122,15 +99,6 @@ fun getPlaylists(): List<Playlist> = listOf(playlist1, playlist2)
 fun getAlbums(): List<Album> = listOf(album1, album2)
 
 fun getArtists(): List<Artist> = listOf(artist1, artist2)
-
-private val artist1 get() = Artist(
-    followers = 1000,
-    name = "Taylor Swift",
-    id = "567",
-    popularity = 100,
-    genres = emptyList(),
-    images = emptyList()
-)
 
 private val artist2 get() = Artist(
     followers = 500,

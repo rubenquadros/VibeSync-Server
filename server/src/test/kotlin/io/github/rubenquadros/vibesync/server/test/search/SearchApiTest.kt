@@ -14,11 +14,12 @@ import kotlin.test.Test
 
 class SearchApiTest {
 
-    private val searchApi = SearchApiImpl(FakeSpotifyApi())
+    private val fakeSpotifyApi = FakeSpotifyApi()
+    private val searchApi = SearchApiImpl(fakeSpotifyApi)
 
     @Test
     fun `when a track is searched successfully then a success response is received`() = runTest {
-        FakeSpotifyApi.isError = false
+        fakeSpotifyApi.isError = false
 
         val response = searchApi.searchTrack(query = "abc", offset = 0, limit = 20)
 
@@ -32,7 +33,7 @@ class SearchApiTest {
 
     @Test
     fun `when there is an error in searching a track then an error response is received`() = runTest {
-        FakeSpotifyApi.isError = true
+        fakeSpotifyApi.isError = true
 
         val response = searchApi.searchTrack(query = "abc", offset = 0, limit = 20)
 
@@ -41,7 +42,7 @@ class SearchApiTest {
 
     @Test
     fun `when an album is searched successfully then a success response is received`() = runTest {
-        FakeSpotifyApi.isError = false
+        fakeSpotifyApi.isError = false
 
         val response = searchApi.searchAlbum(query = "abc", offset = 0, limit = 20)
 
@@ -55,7 +56,7 @@ class SearchApiTest {
 
     @Test
     fun `when there is an error in searching an album then an error response is received`() = runTest {
-        FakeSpotifyApi.isError = true
+        fakeSpotifyApi.isError = true
 
         val response = searchApi.searchAlbum(query = "abc", offset = 0, limit = 20)
 
@@ -64,7 +65,7 @@ class SearchApiTest {
 
     @Test
     fun `when an artist is searched successfully then a success response is received`() = runTest {
-        FakeSpotifyApi.isError = false
+        fakeSpotifyApi.isError = false
 
         val response = searchApi.searchArtist(query = "abc", offset = 0, limit = 20)
 
@@ -78,7 +79,7 @@ class SearchApiTest {
 
     @Test
     fun `when there is an error in searching an artist then an error response is received`() = runTest {
-        FakeSpotifyApi.isError = true
+        fakeSpotifyApi.isError = true
 
         val response = searchApi.searchArtist(query = "abc", offset = 0, limit = 20)
 
@@ -87,7 +88,7 @@ class SearchApiTest {
 
     @Test
     fun `when a playlist is searched successfully then a success response is received`() = runTest {
-        FakeSpotifyApi.isError = false
+        fakeSpotifyApi.isError = false
 
         val response = searchApi.searchPlaylist(query = "abc", offset = 0, limit = 20)
 
@@ -101,7 +102,7 @@ class SearchApiTest {
 
     @Test
     fun `when there is an error in searching a playlist then an error response is received`() = runTest {
-        FakeSpotifyApi.isError = true
+        fakeSpotifyApi.isError = true
 
         val response = searchApi.searchPlaylist(query = "abc", offset = 0, limit = 20)
 

@@ -9,11 +9,12 @@ import kotlin.test.Test
 
 class UnlikeApiTest {
 
-    private val unlikeApi = UnlikeApiImpl(FakeFirestoreApi())
+    private val fakeFirestoreApi = FakeFirestoreApi()
+    private val unlikeApi = UnlikeApiImpl(fakeFirestoreApi)
 
     @Test
     fun `when a track is unliked successfully then a success response is received`() = runTest {
-        FakeFirestoreApi.isError = false
+        fakeFirestoreApi.isError = false
 
         val response = unlikeApi.unlikeTrack("1234", "5678")
 
@@ -22,7 +23,7 @@ class UnlikeApiTest {
 
     @Test
     fun `when there is an error in unliking a track then an error response is received`() = runTest {
-        FakeFirestoreApi.isError = true
+        fakeFirestoreApi.isError = true
 
         val response = unlikeApi.unlikeTrack("1234", "5678")
 
@@ -31,7 +32,7 @@ class UnlikeApiTest {
 
     @Test
     fun `when an album is unliked successfully then a success response is received`() = runTest {
-        FakeFirestoreApi.isError = false
+        fakeFirestoreApi.isError = false
 
         val response = unlikeApi.unlikeAlbum("1234", "5678")
 
@@ -40,7 +41,7 @@ class UnlikeApiTest {
 
     @Test
     fun `when there is an error in unliking an album then an error response is received`() = runTest {
-        FakeFirestoreApi.isError = true
+        fakeFirestoreApi.isError = true
 
         val response = unlikeApi.unlikeAlbum("1234", "5678")
 
@@ -49,7 +50,7 @@ class UnlikeApiTest {
 
     @Test
     fun `when a playlist is unliked successfully then a success response is received`() = runTest {
-        FakeFirestoreApi.isError = false
+        fakeFirestoreApi.isError = false
 
         val response = unlikeApi.unlikePlaylist("1234", "5678")
 
@@ -58,7 +59,7 @@ class UnlikeApiTest {
 
     @Test
     fun `when there is an error in unliking a playlist then an error response is received`() = runTest {
-        FakeFirestoreApi.isError = true
+        fakeFirestoreApi.isError = true
 
         val response = unlikeApi.unlikePlaylist("1234", "5678")
 

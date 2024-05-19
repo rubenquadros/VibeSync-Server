@@ -13,11 +13,12 @@ import kotlin.test.Test
 
 class ProfileApiTest {
 
-    private val profileAPi = ProfileApiImpl(FakeFirestoreApi())
+    private val fakeFirestoreApi = FakeFirestoreApi()
+    private val profileAPi = ProfileApiImpl(fakeFirestoreApi)
 
     @Test
     fun `when user profile info is fetched successfully then a success response is received`() = runTest {
-        FakeFirestoreApi.isError = false
+        fakeFirestoreApi.isError = false
 
         val response = profileAPi.getUserProfile("234")
 
@@ -33,7 +34,7 @@ class ProfileApiTest {
 
     @Test
     fun `when there is an error in fetching user profile info then an error response is received`() = runTest {
-        FakeFirestoreApi.isError = true
+        fakeFirestoreApi.isError = true
 
         val response = profileAPi.getUserProfile("234")
 
@@ -42,7 +43,7 @@ class ProfileApiTest {
 
     @Test
     fun `when the user is not present then not found error response is received`() = runTest {
-        FakeFirestoreApi.isError = false
+        fakeFirestoreApi.isError = false
 
         val response = profileAPi.getUserProfile(unknownUser)
 

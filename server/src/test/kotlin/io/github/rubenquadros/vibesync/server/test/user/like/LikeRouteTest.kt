@@ -23,8 +23,9 @@ import kotlin.test.Test
 
 class LikeRouteTest {
 
+    private val fakeLikeApi = FakeLikeApi()
     private val mockModule = module {
-        single<LikeApi> { FakeLikeApi() }
+        single<LikeApi> { fakeLikeApi }
     }
 
     @BeforeTest
@@ -34,7 +35,7 @@ class LikeRouteTest {
 
     @Test
     fun `when a track is liked successfully then a success response is received`() = testApplication {
-        FakeLikeApi.isError = false
+        fakeLikeApi.isError = false
 
         val response = it.post("user/1234/like-track") {
             setBody(trackInfo)
@@ -46,7 +47,7 @@ class LikeRouteTest {
 
     @Test
     fun `when there is an error in liking a track then an error response is received`() = testApplication {
-        FakeLikeApi.isError = true
+        fakeLikeApi.isError = true
 
         val response = it.post("user/1234/like-track") {
             setBody(trackInfo)
@@ -58,7 +59,7 @@ class LikeRouteTest {
 
     @Test
     fun `when an album is liked successfully then a success response is received`() = testApplication {
-        FakeLikeApi.isError = false
+        fakeLikeApi.isError = false
 
         val response = it.post("user/1234/like-album") {
             setBody(mediaInfo)
@@ -70,7 +71,7 @@ class LikeRouteTest {
 
     @Test
     fun `when there is an error in liking an album then an error response is received`() = testApplication {
-        FakeLikeApi.isError = true
+        fakeLikeApi.isError = true
 
         val response = it.post("user/1234/like-album") {
             setBody(mediaInfo)
@@ -82,7 +83,7 @@ class LikeRouteTest {
 
     @Test
     fun `when a playlist is liked successfully then a success response is received`() = testApplication {
-        FakeLikeApi.isError = false
+        fakeLikeApi.isError = false
 
         val response = it.post("user/1234/like-playlist") {
             setBody(mediaInfo)
@@ -94,7 +95,7 @@ class LikeRouteTest {
 
     @Test
     fun `when there is an error in liking a playlist then an error response is received`() = testApplication {
-        FakeLikeApi.isError = true
+        fakeLikeApi.isError = true
 
         val response = it.post("user/1234/like-playlist") {
             setBody(mediaInfo)
@@ -106,7 +107,7 @@ class LikeRouteTest {
 
     @Test
     fun `when user liked tracks are fetched successfully then a success response is received`() = testApplication {
-        FakeLikeApi.isError = false
+        fakeLikeApi.isError = false
 
         val response = it.get("user/1234/liked-tracks")
 
@@ -119,7 +120,7 @@ class LikeRouteTest {
 
     @Test
     fun `when there is an error in fetching user liked tracks then an error response is received`() = testApplication {
-        FakeLikeApi.isError = true
+        fakeLikeApi.isError = true
 
         val response = it.get("user/1234/liked-tracks")
 
@@ -128,7 +129,7 @@ class LikeRouteTest {
 
     @Test
     fun `when user liked albums are fetched successfully then a success response is received`() = testApplication {
-        FakeLikeApi.isError = false
+        fakeLikeApi.isError = false
 
         val response = it.get("user/1234/liked-albums")
 
@@ -141,7 +142,7 @@ class LikeRouteTest {
 
     @Test
     fun `when there is an error in fetching user liked albums then an error response is received`() = testApplication {
-        FakeLikeApi.isError = true
+        fakeLikeApi.isError = true
 
         val response = it.get("user/1234/liked-albums")
 

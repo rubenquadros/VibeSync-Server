@@ -21,8 +21,9 @@ import kotlin.test.Test
 
 class SearchRouteTest : KoinTest {
 
+    private val fakeSearchApi = FakeSearchApi()
     private val mockModule = module {
-        single<SearchApi> { FakeSearchApi() }
+        single<SearchApi> { fakeSearchApi }
     }
 
     @BeforeTest
@@ -32,7 +33,7 @@ class SearchRouteTest : KoinTest {
 
     @Test
     fun `when a track is searched successfully then a success response is received`() = testApplication {
-        FakeSearchApi.isError = false
+        fakeSearchApi.isError = false
 
         val response = it.get("/search/track?query=abc&offset=0&limit=20")
 
@@ -48,7 +49,7 @@ class SearchRouteTest : KoinTest {
 
     @Test
     fun `when there is an error is searching a track then an error response is received`() = testApplication {
-        FakeSearchApi.isError = true
+        fakeSearchApi.isError = true
 
         val response = it.get("/search/track?query=abc&offset=0&limit=20")
 
@@ -57,7 +58,7 @@ class SearchRouteTest : KoinTest {
 
     @Test
     fun `when an album is searched successfully then a success response is received`() = testApplication {
-        FakeSearchApi.isError = false
+        fakeSearchApi.isError = false
 
         val response = it.get("/search/album?query=abc&offset=0&limit=20")
 
@@ -73,7 +74,7 @@ class SearchRouteTest : KoinTest {
 
     @Test
     fun `when there is an error in searching an album then an error response is received`() = testApplication {
-        FakeSearchApi.isError = true
+        fakeSearchApi.isError = true
 
         val response = it.get("/search/album?query=abc&offset=0&limit=20")
 
@@ -82,7 +83,7 @@ class SearchRouteTest : KoinTest {
 
     @Test
     fun `when an artist is searched successfully then a success response is received`() = testApplication {
-        FakeSearchApi.isError = false
+        fakeSearchApi.isError = false
 
         val response = it.get("/search/artist?query=abc&offset=0&limit=20")
 
@@ -98,7 +99,7 @@ class SearchRouteTest : KoinTest {
 
     @Test
     fun `when there is an error in searching an artist then an error response is received`() = testApplication {
-        FakeSearchApi.isError = true
+        fakeSearchApi.isError = true
 
         val response = it.get("/search/artist?query=abc&offset=0&limit=20")
 
@@ -107,7 +108,7 @@ class SearchRouteTest : KoinTest {
 
     @Test
     fun `when a playlist is searched successfully then a success response is received`() = testApplication {
-        FakeSearchApi.isError = false
+        fakeSearchApi.isError = false
 
         val response = it.get("/search/playlist?query=abc&offset=0&limit=20")
 
@@ -123,7 +124,7 @@ class SearchRouteTest : KoinTest {
 
     @Test
     fun `when there is an error in searching a playlist then an error response is received`() = testApplication {
-        FakeSearchApi.isError = true
+        fakeSearchApi.isError = true
 
         val response = it.get("/search/playlist?query=abc&offset=0&limit=20")
 

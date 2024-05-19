@@ -15,15 +15,17 @@ import kotlin.test.Test
 
 class HomeApiTest {
 
+    private val fakeFirestoreApi = FakeFirestoreApi()
+    private val fakeSpotifyApi = FakeSpotifyApi()
     private val homeApi: HomeApi = HomeApiImpl(
-        firestoreApi = FakeFirestoreApi(),
-        spotifyApi = FakeSpotifyApi()
+        firestoreApi = fakeFirestoreApi,
+        spotifyApi = fakeSpotifyApi
     )
 
     @Test
     fun `when home page data is fetched successfully then a success response is received`() = runTest {
-        FakeFirestoreApi.isError = false
-        FakeSpotifyApi.isError = false
+        fakeFirestoreApi.isError = false
+        fakeSpotifyApi.isError = false
 
         val response = homeApi.getHomePage()
 
@@ -33,15 +35,15 @@ class HomeApiTest {
                 assert(topTracks.size == topEntity.size)
                 assert(topArtists.size == topEntity.size)
                 assert(recentTracks?.size == topEntity.size)
-                assert(featuredPlaylists.size == featuredPlaylistsResponse.result.items.size)
+                assert(featuredPlaylists.size == featuredPlaylistsResponse.items.size)
             }
         }
     }
 
     @Test
     fun `when there is an error in fetching spotify data then an error response is received`() = runTest {
-        FakeSpotifyApi.isError = true
-        FakeFirestoreApi.isError = false
+        fakeSpotifyApi.isError = true
+        fakeFirestoreApi.isError = false
 
         val response = homeApi.getHomePage()
 
@@ -50,8 +52,8 @@ class HomeApiTest {
 
     @Test
     fun `when there is an error in fetching firestore data then an error response is received`() = runTest {
-        FakeFirestoreApi.isError = true
-        FakeSpotifyApi.isError = false
+        fakeFirestoreApi.isError = true
+        fakeSpotifyApi.isError = false
 
         val response = homeApi.getHomePage()
 

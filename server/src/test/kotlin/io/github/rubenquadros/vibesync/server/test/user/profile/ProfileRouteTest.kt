@@ -18,8 +18,9 @@ import kotlin.test.Test
 
 class ProfileRouteTest : KoinTest {
 
+    private val fakeProfileApi = FakeProfileApi()
     private val mockModule = module {
-        single<ProfileApi> { FakeProfileApi() }
+        single<ProfileApi> { fakeProfileApi }
     }
 
     @BeforeTest
@@ -29,7 +30,7 @@ class ProfileRouteTest : KoinTest {
 
     @Test
     fun `when profile data is fetched successfully then a success response is received`() = testApplication {
-        FakeProfileApi.isError = false
+        fakeProfileApi.isError = false
 
         val response = it.get("user/234")
 
@@ -42,7 +43,7 @@ class ProfileRouteTest : KoinTest {
 
     @Test
     fun `when there is an error in fetching profile data from spotify then an error response is received`() = testApplication {
-        FakeProfileApi.isError = true
+        fakeProfileApi.isError = true
 
         val response = it.get("user/234")
 

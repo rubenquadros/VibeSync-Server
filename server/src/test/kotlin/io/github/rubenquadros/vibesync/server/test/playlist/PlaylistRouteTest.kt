@@ -20,8 +20,9 @@ import kotlin.test.Test
 
 class PlaylistRouteTest : KoinTest {
 
+    private val fakePlaylistApi = FakePlaylistApi()
     private val mockModule = module {
-        single<PlaylistApi> { FakePlaylistApi() }
+        single<PlaylistApi> { fakePlaylistApi }
     }
 
     @BeforeTest
@@ -31,7 +32,7 @@ class PlaylistRouteTest : KoinTest {
 
     @Test
     fun `when playlist data is fetched successfully then a success response is received`() = testApplication {
-        FakePlaylistApi.isError = false
+        fakePlaylistApi.isError = false
 
         val response = it.get("/playlist/12")
 
@@ -48,7 +49,7 @@ class PlaylistRouteTest : KoinTest {
 
     @Test
     fun `when there is an error in fetching playlist data from spotify then an error response is received`() = testApplication {
-        FakePlaylistApi.isError = true
+        fakePlaylistApi.isError = true
 
         val response = it.get("/playlist/12")
 
@@ -57,7 +58,7 @@ class PlaylistRouteTest : KoinTest {
 
     @Test
     fun `when playlist tracks data is fetched successfully then a success response is received`() = testApplication {
-        FakePlaylistApi.isError = false
+        fakePlaylistApi.isError = false
 
         val response = it.get("/playlist/12/tracks?offset=0&limit=20")
 
@@ -73,7 +74,7 @@ class PlaylistRouteTest : KoinTest {
 
     @Test
     fun `when there is an error in fetching playlist tracks data from spotify then an error response is received`() = testApplication {
-        FakePlaylistApi.isError = true
+        fakePlaylistApi.isError = true
 
         val response = it.get("/playlist/12/tracks?offset=0&limit=20")
 

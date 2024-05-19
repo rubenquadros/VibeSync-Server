@@ -14,11 +14,12 @@ import kotlin.test.Test
 
 class LikeApiTest {
 
-    private val likeApi = LikeApiImpl(FakeFirestoreApi())
+    private val fakeFirestoreApi = FakeFirestoreApi()
+    private val likeApi = LikeApiImpl(fakeFirestoreApi)
 
     @Test
     fun `when a track is liked successfully then a success response is received`() = runTest {
-        FakeFirestoreApi.isError = false
+        fakeFirestoreApi.isError = false
 
         val response = likeApi.likeTrack("1234", trackInfo)
 
@@ -27,7 +28,7 @@ class LikeApiTest {
 
     @Test
     fun `when there is an error in liking a track then an error response is received`() = runTest {
-        FakeFirestoreApi.isError = true
+        fakeFirestoreApi.isError = true
 
         val response = likeApi.likeTrack("1234", trackInfo)
 
@@ -36,7 +37,7 @@ class LikeApiTest {
 
     @Test
     fun `when an album is liked successfully then a success response is received`() = runTest {
-        FakeFirestoreApi.isError = false
+        fakeFirestoreApi.isError = false
 
         val response = likeApi.likeAlbum("1234", mediaInfo)
 
@@ -45,7 +46,7 @@ class LikeApiTest {
 
     @Test
     fun `when there is an error in liking an album then an error response is received`() = runTest {
-        FakeFirestoreApi.isError = true
+        fakeFirestoreApi.isError = true
 
         val response = likeApi.likeAlbum("1234", mediaInfo)
 
@@ -54,7 +55,7 @@ class LikeApiTest {
 
     @Test
     fun `when a playlist is liked successfully then a success response is received`() = runTest {
-        FakeFirestoreApi.isError = false
+        fakeFirestoreApi.isError = false
 
         val response = likeApi.likePlaylist("1234", mediaInfo)
 
@@ -63,7 +64,7 @@ class LikeApiTest {
 
     @Test
     fun `when there is an error in liking a playlist then an error response is received`() = runTest {
-        FakeFirestoreApi.isError = true
+        fakeFirestoreApi.isError = true
 
         val response = likeApi.likePlaylist("1234", mediaInfo)
 
@@ -72,7 +73,7 @@ class LikeApiTest {
 
     @Test
     fun `when user liked tracks are fetched successfully then a success response is received`() = runTest {
-        FakeFirestoreApi.isError = false
+        fakeFirestoreApi.isError = false
 
         val response = likeApi.getLikedTracks("1234")
 
@@ -83,7 +84,7 @@ class LikeApiTest {
 
     @Test
     fun `when there is an error in fetching user liked tracks then an error response is received`() = runTest {
-        FakeFirestoreApi.isError = true
+        fakeFirestoreApi.isError = true
 
         val response = likeApi.getLikedTracks("1234")
 
@@ -92,7 +93,7 @@ class LikeApiTest {
 
     @Test
     fun `when user liked albums are fetched successfully then a success response is received`() = runTest {
-        FakeFirestoreApi.isError = false
+        fakeFirestoreApi.isError = false
 
         val response = likeApi.getLikedAlbums("1234")
 
@@ -103,7 +104,7 @@ class LikeApiTest {
 
     @Test
     fun `when there is an error in fetching user liked albums then an error response is received`() = runTest {
-        FakeFirestoreApi.isError = true
+        fakeFirestoreApi.isError = true
 
         val response = likeApi.getLikedAlbums("1234")
 
