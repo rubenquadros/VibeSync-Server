@@ -187,7 +187,7 @@ class FirestoreApiImpl : FirestoreApi {
     override suspend fun getLikedTracks(userId: String): FirestoreApiResponse<List<TrackInfo>> {
         return getFirestoreResponse {
             val future = firestore.collection("users").document(userId).collection("liked_tracks")
-                .orderBy("timestamp", Query.Direction.DESCENDING).get()
+                .orderBy("timestamp", Query.Direction.DESCENDING).limit(10).get()
 
             val likedTracks = future.get().documents.map { documentSnapshot: QueryDocumentSnapshot ->
                 val data = documentSnapshot.getDataMap()
@@ -207,7 +207,7 @@ class FirestoreApiImpl : FirestoreApi {
     override suspend fun getLikedAlbums(userId: String): FirestoreApiResponse<List<MediaInfo>> {
         return getFirestoreResponse {
             val future = firestore.collection("users").document(userId).collection("liked_albums")
-                .orderBy("timestamp", Query.Direction.DESCENDING).get()
+                .orderBy("timestamp", Query.Direction.DESCENDING).limit(10).get()
 
             val likedAlbums = future.get().documents.map { documentSnapshot: QueryDocumentSnapshot ->
                 val data = documentSnapshot.getDataMap()
@@ -254,7 +254,7 @@ class FirestoreApiImpl : FirestoreApi {
     override suspend fun getUserPlaylists(userId: String): FirestoreApiResponse<List<PlaylistInfo>> {
         return getFirestoreResponse {
             val future = firestore.collection("users").document(userId).collection("playlists")
-                .orderBy("updatedAt", Query.Direction.DESCENDING).get()
+                .orderBy("updatedAt", Query.Direction.DESCENDING).limit(10).get()
 
             val playlists = future.get().documents.map { documentSnapshot: QueryDocumentSnapshot ->
                 val data = documentSnapshot.getDataMap()
