@@ -3,8 +3,11 @@ package io.github.rubenquadros.vibesync.firestore
 import io.github.rubenquadros.shared.models.MediaInfo
 import io.github.rubenquadros.shared.models.TrackInfo
 import io.github.rubenquadros.vibesync.firestore.model.FirestoreApiResponse
+import io.github.rubenquadros.vibesync.firestore.model.LikedAlbumsPaginatedResponse
+import io.github.rubenquadros.vibesync.firestore.model.TracksPaginatedResponse
 import io.github.rubenquadros.vibesync.firestore.model.PlaylistInfo
 import io.github.rubenquadros.vibesync.firestore.model.TopEntity
+import io.github.rubenquadros.vibesync.firestore.model.UserPlaylistsPaginatedResponse
 import io.github.rubenquadros.vibesync.firestore.model.UserProfile
 
 interface FirestoreApi {
@@ -32,17 +35,39 @@ interface FirestoreApi {
 
     suspend fun getLikedTracks(userId: String): FirestoreApiResponse<List<TrackInfo>>
 
+    suspend fun getPaginatedLikedTracks(userId: String, offset: Int): FirestoreApiResponse<TracksPaginatedResponse>
+
     suspend fun getLikedAlbums(userId: String): FirestoreApiResponse<List<MediaInfo>>
 
-    suspend fun createPlaylist(userId: String, userName: String, playlistName: String, trackInfo: TrackInfo): FirestoreApiResponse<Nothing>
+    suspend fun getPaginatedLikedAlbums(userId: String, offset: Int): FirestoreApiResponse<LikedAlbumsPaginatedResponse>
+
+    suspend fun createPlaylist(
+        userId: String,
+        userName: String,
+        playlistName: String,
+        trackInfo: TrackInfo
+    ): FirestoreApiResponse<Nothing>
 
     suspend fun getUserPlaylists(userId: String): FirestoreApiResponse<List<PlaylistInfo>>
 
-    suspend fun addTrackToPlaylist(userId: String, playlistId: String, trackInfo: TrackInfo): FirestoreApiResponse<Nothing>
+    suspend fun getPaginatedUserPlaylists(
+        userId: String,
+        offset: Int
+    ): FirestoreApiResponse<UserPlaylistsPaginatedResponse>
 
-    suspend fun removeTracksFromPlaylist(userId: String, playlistId: String, trackIds: List<String>): FirestoreApiResponse<Nothing>
+    suspend fun addTrackToPlaylist(
+        userId: String,
+        playlistId: String,
+        trackInfo: TrackInfo
+    ): FirestoreApiResponse<Nothing>
 
-    suspend fun getPlaylistTracks(userId: String, playlistId: String): FirestoreApiResponse<List<TrackInfo>>
+    suspend fun removeTracksFromPlaylist(
+        userId: String,
+        playlistId: String,
+        trackIds: List<String>
+    ): FirestoreApiResponse<Nothing>
+
+    suspend fun getPlaylistTracks(userId: String, playlistId: String, offset: Int): FirestoreApiResponse<TracksPaginatedResponse>
 
     suspend fun deletePlaylist(userId: String, playlistId: String): FirestoreApiResponse<Nothing>
 }

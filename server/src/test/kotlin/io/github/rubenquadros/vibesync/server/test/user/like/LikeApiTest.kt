@@ -1,7 +1,8 @@
 package io.github.rubenquadros.vibesync.server.test.user.like
 
-import io.github.rubenquadros.shared.models.MediaInfo
-import io.github.rubenquadros.shared.models.TrackInfo
+import io.github.rubenquadros.vibesync.server.model.GetPaginatedResponse
+import io.github.rubenquadros.vibesync.server.model.MediaPage
+import io.github.rubenquadros.vibesync.server.model.TracksPage
 import io.github.rubenquadros.vibesync.server.test.FakeFirestoreApi
 import io.github.rubenquadros.vibesync.server.test.assertFirestoreFailure
 import io.github.rubenquadros.vibesync.server.test.assertSuccess
@@ -75,10 +76,11 @@ class LikeApiTest {
     fun `when user liked tracks are fetched successfully then a success response is received`() = runTest {
         fakeFirestoreApi.isError = false
 
-        val response = likeApi.getLikedTracks("1234")
+        val response = likeApi.getLikedTracks("1234", 0)
 
-        response.assertSuccess<List<TrackInfo>> {
-            assert(it.size == 1)
+        response.assertSuccess<GetPaginatedResponse> {
+            assert(!it.isNext)
+            assert((it.content as TracksPage).items.isNotEmpty())
         }
     }
 
@@ -86,7 +88,7 @@ class LikeApiTest {
     fun `when there is an error in fetching user liked tracks then an error response is received`() = runTest {
         fakeFirestoreApi.isError = true
 
-        val response = likeApi.getLikedTracks("1234")
+        val response = likeApi.getLikedTracks("1234", 0)
 
         response.assertFirestoreFailure()
     }
@@ -95,10 +97,11 @@ class LikeApiTest {
     fun `when user liked albums are fetched successfully then a success response is received`() = runTest {
         fakeFirestoreApi.isError = false
 
-        val response = likeApi.getLikedAlbums("1234")
+        val response = likeApi.getLikedAlbums("1234", 0)
 
-        response.assertSuccess<List<MediaInfo>> {
-            assert(it.size == 1)
+        response.assertSuccess<GetPaginatedResponse> {
+            assert(!it.isNext)
+            assert((it.content as MediaPage).items.isNotEmpty())
         }
     }
 
@@ -106,7 +109,7 @@ class LikeApiTest {
     fun `when there is an error in fetching user liked albums then an error response is received`() = runTest {
         fakeFirestoreApi.isError = true
 
-        val response = likeApi.getLikedAlbums("1234")
+        val response = likeApi.getLikedAlbums("1234", 0)
 
         response.assertFirestoreFailure()
     }

@@ -6,11 +6,11 @@ import io.github.rubenquadros.vibesync.kovibes.toTrackInfo
 import io.github.rubenquadros.vibesync.server.album.toAlbumResponse
 import io.github.rubenquadros.vibesync.server.artist.toArtistInfo
 import io.github.rubenquadros.vibesync.server.model.GetPaginatedResponse
+import io.github.rubenquadros.vibesync.server.model.TracksPage
 import io.github.rubenquadros.vibesync.server.model.Response
 import io.github.rubenquadros.vibesync.server.model.SearchAlbums
 import io.github.rubenquadros.vibesync.server.model.SearchArtists
 import io.github.rubenquadros.vibesync.server.model.SearchPlaylists
-import io.github.rubenquadros.vibesync.server.model.SearchTracks
 import io.github.rubenquadros.vibesync.server.model.getErrorResponse
 import io.github.rubenquadros.vibesync.server.model.getSuccessResponse
 import io.github.rubenquadros.vibesync.server.playlist.toPlaylistResponse
@@ -37,7 +37,7 @@ class SearchApiImpl(private val spotifyApi: SpotifyApi) : SearchApi {
                 getSuccessResponse(
                     data = GetPaginatedResponse(
                         isNext = isNext,
-                        content = SearchTracks(tracks = items.map { it.toTrackInfo() })
+                        content = TracksPage(items = items.map { it.toTrackInfo() })
                     )
                 )
             }

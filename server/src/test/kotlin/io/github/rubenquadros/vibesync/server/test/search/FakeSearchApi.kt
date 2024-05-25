@@ -4,11 +4,11 @@ import io.github.rubenquadros.vibesync.kovibes.toTrackInfo
 import io.github.rubenquadros.vibesync.server.album.toAlbumResponse
 import io.github.rubenquadros.vibesync.server.artist.toArtistInfo
 import io.github.rubenquadros.vibesync.server.model.GetPaginatedResponse
+import io.github.rubenquadros.vibesync.server.model.TracksPage
 import io.github.rubenquadros.vibesync.server.model.Response
 import io.github.rubenquadros.vibesync.server.model.SearchAlbums
 import io.github.rubenquadros.vibesync.server.model.SearchArtists
 import io.github.rubenquadros.vibesync.server.model.SearchPlaylists
-import io.github.rubenquadros.vibesync.server.model.SearchTracks
 import io.github.rubenquadros.vibesync.server.playlist.toPlaylistResponse
 import io.github.rubenquadros.vibesync.server.search.SearchApi
 import io.github.rubenquadros.vibesync.server.test.FakeApi
@@ -23,7 +23,7 @@ class FakeSearchApi : SearchApi, FakeApi() {
         return getTestApiResponse(
             GetPaginatedResponse(
                 isNext = true,
-                content = SearchTracks(geTracks().map { it.toTrackInfo() })
+                content = TracksPage(geTracks().map { it.toTrackInfo() })
             )
         )
     }

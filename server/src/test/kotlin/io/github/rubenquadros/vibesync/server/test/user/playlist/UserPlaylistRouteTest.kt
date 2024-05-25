@@ -1,7 +1,8 @@
 package io.github.rubenquadros.vibesync.server.test.user.playlist
 
-import io.github.rubenquadros.shared.models.TrackInfo
-import io.github.rubenquadros.vibesync.firestore.model.PlaylistInfo
+import io.github.rubenquadros.vibesync.server.model.GetPaginatedResponse
+import io.github.rubenquadros.vibesync.server.model.PlaylistPage
+import io.github.rubenquadros.vibesync.server.model.TracksPage
 import io.github.rubenquadros.vibesync.server.test.assertError
 import io.github.rubenquadros.vibesync.server.test.assertOk
 import io.github.rubenquadros.vibesync.server.test.cleanupKoin
@@ -129,20 +130,23 @@ class UserPlaylistRouteTest {
     fun `when user playlists are retrieved successfully then a success response is received`() = testApplication {
         fakeUserPlaylistApi.isError = false
 
-        val response = it.get("/user/1234/playlists")
+        val response = it.get("/user/1234/playlists?offset=0")
 
         response.assertOk()
 
-        val body = response.body<List<PlaylistInfo>>()
+        val body = response.body<GetPaginatedResponse>()
 
-        assert(body.size == 1)
+        with(body) {
+            assert(!isNext)
+            assert((content as PlaylistPage).items.size == 1)
+        }
     }
 
     @Test
     fun `when there is an error in retrieving user playlists then an error response is received`() = testApplication {
         fakeUserPlaylistApi.isError = true
 
-        val response = it.get("/user/1234/playlists")
+        val response = it.get("/user/1234/playlists?offset=0")
 
         response.assertError()
     }
@@ -151,20 +155,23 @@ class UserPlaylistRouteTest {
     fun `when a playlist tracks are retrieved successfully then a success response is received`() = testApplication {
         fakeUserPlaylistApi.isError = false
 
-        val response = it.get("/user/1234/playlist/6789/tracks")
+        val response = it.get("/user/1234/playlist/6789/tracks?offset=0")
 
         response.assertOk()
 
-        val body = response.body<List<TrackInfo>>()
+        val body = response.body<GetPaginatedResponse>()
 
-        assert(body.size == 1)
+        with(body) {
+            assert(!isNext)
+            assert((content as TracksPage).items.size == 1)
+        }
     }
 
     @Test
     fun `when there is an error in fetching user playlist tracks then an error response is received`() = testApplication {
         fakeUserPlaylistApi.isError = true
 
-        val response = it.get("/user/1234/playlist/6789/tracks")
+        val response = it.get("/user/1234/playlist/6789/tracks?offset=0")
 
         response.assertError()
     }

@@ -50,13 +50,13 @@ fun Route.likeRoute() {
     }
 
     get<User.Id.LikedTracks> { likedTracks ->
-        val response = likeApi.getLikedTracks(likedTracks.parent.id)
+        val response = likeApi.getLikedTracks(likedTracks.parent.id, likedTracks.offset)
 
         call.respond(status = response.status, message = response.data)
     }
 
     get<User.Id.LikedAlbums> { likedAlbums ->
-        val response = likeApi.getLikedAlbums(likedAlbums.parent.id)
+        val response = likeApi.getLikedAlbums(likedAlbums.parent.id, likedAlbums.offset)
 
         call.respond(status = response.status, message = response.data)
     }

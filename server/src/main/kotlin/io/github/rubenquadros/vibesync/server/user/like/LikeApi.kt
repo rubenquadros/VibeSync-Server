@@ -4,7 +4,10 @@ import io.github.rubenquadros.shared.models.MediaInfo
 import io.github.rubenquadros.shared.models.TrackInfo
 import io.github.rubenquadros.vibesync.firestore.FirestoreApi
 import io.github.rubenquadros.vibesync.firestore.model.FirestoreApiResponse
+import io.github.rubenquadros.vibesync.server.model.GetPaginatedResponse
+import io.github.rubenquadros.vibesync.server.model.MediaPage
 import io.github.rubenquadros.vibesync.server.model.Response
+import io.github.rubenquadros.vibesync.server.model.TracksPage
 import io.github.rubenquadros.vibesync.server.model.getEmptyBodySuccessResponse
 import io.github.rubenquadros.vibesync.server.model.getErrorResponse
 import io.github.rubenquadros.vibesync.server.model.getSuccessResponse
@@ -17,9 +20,9 @@ interface LikeApi {
 
     suspend fun likePlaylist(userId: String, mediaInfo: MediaInfo): Response
 
-    suspend fun getLikedTracks(userId: String): Response
+    suspend fun getLikedTracks(userId: String, offset: Int): Response
 
-    suspend fun getLikedAlbums(userId: String): Response
+    suspend fun getLikedAlbums(userId: String, offset: Int): Response
 }
 
 @Single
@@ -60,22 +63,36 @@ class LikeApiImpl(private val firestoreApi: FirestoreApi) : LikeApi {
         }
     }
 
-    override suspend fun getLikedTracks(userId: String): Response {
-        val response = firestoreApi.getLikedTracks(userId)
+    override suspend fun getLikedTracks(userId: String, offset: Int): Response {
+        val response = firestoreApi.getPaginatedLikedTracks(userId, offset)
 
         return if (response is FirestoreApiResponse.Success) {
-            getSuccessResponse(response.data)
+            getSuccessResponse(
+                with(response.data) {
+                    GetPaginatedResponse(
+                        isNext = isNext,
+                        content = TracksPage(items)
+                    )
+                }
+            )
         } else {
             val errorResponse = response as FirestoreApiResponse.Error
             getErrorResponse(status = errorResponse.statusCode, message = errorResponse.throwable.message.toString())
         }
     }
 
-    override suspend fun getLikedAlbums(userId: String): Response {
-        val response = firestoreApi.getLikedAlbums(userId)
+    override suspend fun getLikedAlbums(userId: String, offset: Int): Response {
+        val response = firestoreApi.getPaginatedLikedAlbums(userId, offset)
 
         return if (response is FirestoreApiResponse.Success) {
-            getSuccessResponse(response.data)
+            getSuccessResponse(
+                with(response.data) {
+                    GetPaginatedResponse(
+                        isNext = isNext,
+                        content = MediaPage(items)
+                    )
+                }
+            )
         } else {
             val errorResponse = response as FirestoreApiResponse.Error
             getErrorResponse(status = errorResponse.statusCode, message = errorResponse.throwable.message.toString())

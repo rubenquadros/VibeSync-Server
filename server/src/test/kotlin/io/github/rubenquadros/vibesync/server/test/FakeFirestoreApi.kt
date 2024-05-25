@@ -4,8 +4,11 @@ import io.github.rubenquadros.shared.models.MediaInfo
 import io.github.rubenquadros.shared.models.TrackInfo
 import io.github.rubenquadros.vibesync.firestore.FirestoreApi
 import io.github.rubenquadros.vibesync.firestore.model.FirestoreApiResponse
+import io.github.rubenquadros.vibesync.firestore.model.LikedAlbumsPaginatedResponse
+import io.github.rubenquadros.vibesync.firestore.model.TracksPaginatedResponse
 import io.github.rubenquadros.vibesync.firestore.model.PlaylistInfo
 import io.github.rubenquadros.vibesync.firestore.model.TopEntity
+import io.github.rubenquadros.vibesync.firestore.model.UserPlaylistsPaginatedResponse
 import io.github.rubenquadros.vibesync.firestore.model.UserProfile
 import io.github.rubenquadros.vibesync.firestore.model.getErrorResponse
 import io.github.rubenquadros.vibesync.test.TestApi
@@ -92,8 +95,19 @@ class FakeFirestoreApi : TestFirestoreApi() {
         return getFirestoreResponse(tracks)
     }
 
+    override suspend fun getPaginatedLikedTracks(userId: String, offset: Int): FirestoreApiResponse<TracksPaginatedResponse> {
+        return getFirestoreResponse(TracksPaginatedResponse(isNext = false, items = tracks))
+    }
+
     override suspend fun getLikedAlbums(userId: String): FirestoreApiResponse<List<MediaInfo>> {
         return getFirestoreResponse(likedAlbums)
+    }
+
+    override suspend fun getPaginatedLikedAlbums(
+        userId: String,
+        offset: Int
+    ): FirestoreApiResponse<LikedAlbumsPaginatedResponse> {
+        return getFirestoreResponse(LikedAlbumsPaginatedResponse(isNext = false, items = likedAlbums))
     }
 
     override suspend fun createPlaylist(userId: String, userName: String, playlistName: String, trackInfo: TrackInfo): FirestoreApiResponse<Nothing> {
@@ -102,6 +116,13 @@ class FakeFirestoreApi : TestFirestoreApi() {
 
     override suspend fun getUserPlaylists(userId: String): FirestoreApiResponse<List<PlaylistInfo>> {
         return getFirestoreResponse(userPlaylists)
+    }
+
+    override suspend fun getPaginatedUserPlaylists(
+        userId: String,
+        offset: Int
+    ): FirestoreApiResponse<UserPlaylistsPaginatedResponse> {
+        return getFirestoreResponse(UserPlaylistsPaginatedResponse(isNext = false, items = userPlaylists))
     }
 
     override suspend fun addTrackToPlaylist(
@@ -116,8 +137,8 @@ class FakeFirestoreApi : TestFirestoreApi() {
         return getFirestoreNoBodyResponse()
     }
 
-    override suspend fun getPlaylistTracks(userId: String, playlistId: String): FirestoreApiResponse<List<TrackInfo>> {
-        return getFirestoreResponse(tracks)
+    override suspend fun getPlaylistTracks(userId: String, playlistId: String, offset: Int): FirestoreApiResponse<TracksPaginatedResponse> {
+        return getFirestoreResponse(TracksPaginatedResponse(isNext = false, items = tracks))
     }
 
     override suspend fun deletePlaylist(userId: String, playlistId: String): FirestoreApiResponse<Nothing> {

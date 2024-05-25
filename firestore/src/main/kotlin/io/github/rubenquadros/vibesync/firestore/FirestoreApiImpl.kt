@@ -11,8 +11,11 @@ import com.google.firebase.cloud.FirestoreClient
 import io.github.rubenquadros.shared.models.MediaInfo
 import io.github.rubenquadros.shared.models.TrackInfo
 import io.github.rubenquadros.vibesync.firestore.model.FirestoreApiResponse
+import io.github.rubenquadros.vibesync.firestore.model.LikedAlbumsPaginatedResponse
+import io.github.rubenquadros.vibesync.firestore.model.TracksPaginatedResponse
 import io.github.rubenquadros.vibesync.firestore.model.PlaylistInfo
 import io.github.rubenquadros.vibesync.firestore.model.TopEntity
+import io.github.rubenquadros.vibesync.firestore.model.UserPlaylistsPaginatedResponse
 import io.github.rubenquadros.vibesync.firestore.model.UserProfile
 import io.github.rubenquadros.vibesync.firestore.model.getErrorResponse
 import io.github.rubenquadros.vibesync.firestore.model.getSuccessResponse
@@ -26,6 +29,8 @@ import java.util.*
 
 @Single
 class FirestoreApiImpl : FirestoreApi {
+
+    private val pager: Pager by lazy { Pager() }
 
     private val firestore: Firestore by lazy {
         val databaseUrl = System.getenv("DATABASE_URL")
@@ -43,11 +48,11 @@ class FirestoreApiImpl : FirestoreApi {
     override suspend fun getTopArtists(): FirestoreApiResponse<List<TopEntity>> {
         return getFirestoreResponse {
             val future = firestore.collection("top_artists").get()
-            val topArtists = future.get().documents.map { documentSnapshot: QueryDocumentSnapshot ->
+            val topArtists = future.get().documents.map { queryDocumentSnapshot: QueryDocumentSnapshot ->
                 TopEntity(
-                    id = documentSnapshot["id"].toString(),
-                    name = documentSnapshot["name"].toString(),
-                    image = documentSnapshot["image"].toString()
+                    id = queryDocumentSnapshot["id"].toString(),
+                    name = queryDocumentSnapshot["name"].toString(),
+                    image = queryDocumentSnapshot["image"].toString()
                 )
             }
 
@@ -58,11 +63,11 @@ class FirestoreApiImpl : FirestoreApi {
     override suspend fun getTopTracks(): FirestoreApiResponse<List<TopEntity>> {
         return getFirestoreResponse {
             val future = firestore.collection("top_tracks").get()
-            val topTracks = future.get().documents.map { documentSnapshot: QueryDocumentSnapshot ->
+            val topTracks = future.get().documents.map { queryDocumentSnapshot: QueryDocumentSnapshot ->
                 TopEntity(
-                    id = documentSnapshot["id"].toString(),
-                    name = documentSnapshot["name"].toString(),
-                    image = documentSnapshot["image"].toString()
+                    id = queryDocumentSnapshot["id"].toString(),
+                    name = queryDocumentSnapshot["name"].toString(),
+                    image = queryDocumentSnapshot["image"].toString()
                 )
             }
 
@@ -73,11 +78,11 @@ class FirestoreApiImpl : FirestoreApi {
     override suspend fun getTopAlbums(): FirestoreApiResponse<List<TopEntity>> {
         return getFirestoreResponse {
             val future = firestore.collection("top_albums").get()
-            val topAlbums = future.get().documents.map { documentSnapshot: QueryDocumentSnapshot ->
+            val topAlbums = future.get().documents.map { queryDocumentSnapshot: QueryDocumentSnapshot ->
                 TopEntity(
-                    id = documentSnapshot["id"].toString(),
-                    name = documentSnapshot["name"].toString(),
-                    image = documentSnapshot["image"].toString()
+                    id = queryDocumentSnapshot["id"].toString(),
+                    name = queryDocumentSnapshot["name"].toString(),
+                    image = queryDocumentSnapshot["image"].toString()
                 )
             }
 
@@ -88,11 +93,11 @@ class FirestoreApiImpl : FirestoreApi {
     override suspend fun getRecentTracks(): FirestoreApiResponse<List<TopEntity>> {
         return getFirestoreResponse {
             val future = firestore.collection("recent_tracks").get()
-            val recentTracks = future.get().documents.map { documentSnapshot: QueryDocumentSnapshot ->
+            val recentTracks = future.get().documents.map { queryDocumentSnapshot: QueryDocumentSnapshot ->
                 TopEntity(
-                    id = documentSnapshot["id"].toString(),
-                    name = documentSnapshot["name"].toString(),
-                    image = documentSnapshot["image"].toString()
+                    id = queryDocumentSnapshot["id"].toString(),
+                    name = queryDocumentSnapshot["name"].toString(),
+                    image = queryDocumentSnapshot["image"].toString()
                 )
             }
 
@@ -187,10 +192,10 @@ class FirestoreApiImpl : FirestoreApi {
     override suspend fun getLikedTracks(userId: String): FirestoreApiResponse<List<TrackInfo>> {
         return getFirestoreResponse {
             val future = firestore.collection("users").document(userId).collection("liked_tracks")
-                .orderBy("timestamp", Query.Direction.DESCENDING).get()
+                .orderBy("timestamp", Query.Direction.DESCENDING).limit(10).get()
 
-            val likedTracks = future.get().documents.map { documentSnapshot: QueryDocumentSnapshot ->
-                val data = documentSnapshot.getDataMap()
+            val likedTracks = future.get().documents.map { queryDocumentSnapshot: QueryDocumentSnapshot ->
+                val data = queryDocumentSnapshot.getDataMap()
                 TrackInfo(
                     id = data["id"].toString(),
                     name = data["name"].toString(),
@@ -204,13 +209,42 @@ class FirestoreApiImpl : FirestoreApi {
         }
     }
 
+    override suspend fun getPaginatedLikedTracks(
+        userId: String,
+        offset: Int
+    ): FirestoreApiResponse<TracksPaginatedResponse> {
+        return getFirestoreResponse {
+            val query = firestore.collection("users").document(userId).collection("liked_tracks")
+                .orderBy("timestamp", Query.Direction.DESCENDING)
+
+            val pageResponse = pager.getPage(offset.coerceAtLeast(0), query)
+
+            getSuccessResponse(
+                TracksPaginatedResponse(
+                    isNext = pageResponse.isNext,
+                    items = pageResponse.page.map { queryDocumentSnapshot: QueryDocumentSnapshot ->
+                        val data = queryDocumentSnapshot.getDataMap()
+                        TrackInfo(
+                            id = data["id"].toString(),
+                            name = data["name"].toString(),
+                            duration = data["duration"] as Long,
+                            previewUrl = (data["previewUrl"] as? String),
+                            images = data.getImages()
+                        )
+                    }
+                )
+            )
+
+        }
+    }
+
     override suspend fun getLikedAlbums(userId: String): FirestoreApiResponse<List<MediaInfo>> {
         return getFirestoreResponse {
             val future = firestore.collection("users").document(userId).collection("liked_albums")
-                .orderBy("timestamp", Query.Direction.DESCENDING).get()
+                .orderBy("timestamp", Query.Direction.DESCENDING).limit(10).get()
 
-            val likedAlbums = future.get().documents.map { documentSnapshot: QueryDocumentSnapshot ->
-                val data = documentSnapshot.getDataMap()
+            val likedAlbums = future.get().documents.map { queryDocumentSnapshot: QueryDocumentSnapshot ->
+                val data = queryDocumentSnapshot.getDataMap()
                 MediaInfo(
                     id = data["id"].toString(),
                     name = data["name"].toString(),
@@ -219,6 +253,32 @@ class FirestoreApiImpl : FirestoreApi {
             }
 
             getSuccessResponse(likedAlbums)
+        }
+    }
+
+    override suspend fun getPaginatedLikedAlbums(
+        userId: String,
+        offset: Int
+    ): FirestoreApiResponse<LikedAlbumsPaginatedResponse> {
+        return getFirestoreResponse {
+            val query = firestore.collection("users").document(userId).collection("liked_albums")
+                .orderBy("timestamp", Query.Direction.DESCENDING)
+
+            val pageResponse = pager.getPage(offset.coerceAtLeast(0), query)
+
+            getSuccessResponse(
+                LikedAlbumsPaginatedResponse(
+                    isNext = pageResponse.isNext,
+                    items = pageResponse.page.map { queryDocumentSnapshot: QueryDocumentSnapshot ->
+                        val data = queryDocumentSnapshot.getDataMap()
+                        MediaInfo(
+                            id = data["id"].toString(),
+                            name = data["name"].toString(),
+                            images = data.getImages()
+                        )
+                    }
+                )
+            )
         }
     }
 
@@ -254,10 +314,10 @@ class FirestoreApiImpl : FirestoreApi {
     override suspend fun getUserPlaylists(userId: String): FirestoreApiResponse<List<PlaylistInfo>> {
         return getFirestoreResponse {
             val future = firestore.collection("users").document(userId).collection("playlists")
-                .orderBy("updatedAt", Query.Direction.DESCENDING).get()
+                .orderBy("updatedAt", Query.Direction.DESCENDING).limit(10).get()
 
-            val playlists = future.get().documents.map { documentSnapshot: QueryDocumentSnapshot ->
-                val data = documentSnapshot.getDataMap()
+            val playlists = future.get().documents.map { queryDocumentSnapshot: QueryDocumentSnapshot ->
+                val data = queryDocumentSnapshot.getDataMap()
                 PlaylistInfo(
                     id = data["id"].toString(),
                     playlistName = data["playlistName"].toString(),
@@ -270,6 +330,33 @@ class FirestoreApiImpl : FirestoreApi {
         }
     }
 
+    override suspend fun getPaginatedUserPlaylists(
+        userId: String,
+        offset: Int
+    ): FirestoreApiResponse<UserPlaylistsPaginatedResponse> {
+        return getFirestoreResponse {
+            val query = firestore.collection("users").document(userId).collection("playlists")
+                .orderBy("updatedAt", Query.Direction.DESCENDING)
+
+            val pageResponse = pager.getPage(offset.coerceAtLeast(0), query)
+
+            getSuccessResponse(
+                UserPlaylistsPaginatedResponse(
+                    isNext = pageResponse.isNext,
+                    items = pageResponse.page.map { queryDocumentSnapshot: QueryDocumentSnapshot ->
+                        val data = queryDocumentSnapshot.getDataMap()
+                        PlaylistInfo(
+                            id = data["id"].toString(),
+                            playlistName = data["playlistName"].toString(),
+                            owner = data["owner"].toString(),
+                            image = (data["image"] as? String)
+                        )
+                    }
+                )
+            )
+        }
+    }
+
     override suspend fun addTrackToPlaylist(
         userId: String,
         playlistId: String,
@@ -279,8 +366,10 @@ class FirestoreApiImpl : FirestoreApi {
             writeBatch {
                 val batch = firestore.batch()
 
-                val userDocument = firestore.collection("users").document(userId).collection("playlists").document(playlistId)
-                val tracksDocument = firestore.collection("playlists").document(playlistId).collection("tracks").document(trackInfo.id)
+                val userDocument =
+                    firestore.collection("users").document(userId).collection("playlists").document(playlistId)
+                val tracksDocument =
+                    firestore.collection("playlists").document(playlistId).collection("tracks").document(trackInfo.id)
 
                 batch.update(userDocument, mapOf("updatedAt" to FieldValue.serverTimestamp()))
                 batch.set(tracksDocument, trackInfo)
@@ -292,12 +381,17 @@ class FirestoreApiImpl : FirestoreApi {
         }
     }
 
-    override suspend fun removeTracksFromPlaylist(userId: String, playlistId: String, trackIds: List<String>): FirestoreApiResponse<Nothing> {
+    override suspend fun removeTracksFromPlaylist(
+        userId: String,
+        playlistId: String,
+        trackIds: List<String>
+    ): FirestoreApiResponse<Nothing> {
         return getFirestoreResponse {
             writeBatch {
                 val batch = firestore.batch()
 
-                val userDocument = firestore.collection("users").document(userId).collection("playlists").document(playlistId)
+                val userDocument =
+                    firestore.collection("users").document(userId).collection("playlists").document(playlistId)
                 val playlistDocument = firestore.collection("playlists").document(playlistId)
 
                 batch.update(userDocument, mapOf("updatedAt" to FieldValue.serverTimestamp()))
@@ -313,20 +407,27 @@ class FirestoreApiImpl : FirestoreApi {
         }
     }
 
-    override suspend fun getPlaylistTracks(userId: String, playlistId: String): FirestoreApiResponse<List<TrackInfo>> {
+    override suspend fun getPlaylistTracks(userId: String, playlistId: String, offset: Int): FirestoreApiResponse<TracksPaginatedResponse> {
         return getFirestoreResponse {
-            val future = firestore.collection("playlists").document(playlistId).collection("tracks").get()
+            val query = firestore.collection("playlists").document(playlistId).collection("tracks")
 
-            val tracks = future.get().documents.map { documentSnapshot: QueryDocumentSnapshot ->
-                TrackInfo(
-                    id = documentSnapshot["id"].toString(),
-                    name = documentSnapshot["name"].toString(),
-                    duration = documentSnapshot["duration"] as Long,
-                    images = documentSnapshot.getImages()
+            val pageResponse = pager.getPage(offset.coerceAtLeast(0), query)
+
+            getSuccessResponse(
+                TracksPaginatedResponse(
+                    isNext = pageResponse.isNext,
+                    items = pageResponse.page.map { queryDocumentSnapshot: QueryDocumentSnapshot ->
+                        val data = queryDocumentSnapshot.getDataMap()
+                        TrackInfo(
+                            id = data["id"].toString(),
+                            name = data["name"].toString(),
+                            duration = data["duration"] as Long,
+                            previewUrl = (data["previewUrl"] as? String),
+                            images = data.getImages()
+                        )
+                    }
                 )
-            }
-
-            getSuccessResponse(tracks)
+            )
         }
     }
 
@@ -335,7 +436,8 @@ class FirestoreApiImpl : FirestoreApi {
             writeBatch {
                 val batch = firestore.batch()
 
-                val userDocument = firestore.collection("users").document(userId).collection("playlists").document(playlistId)
+                val userDocument =
+                    firestore.collection("users").document(userId).collection("playlists").document(playlistId)
                 val playlistDocument = firestore.collection("playlists").document(playlistId)
 
                 batch.delete(userDocument)

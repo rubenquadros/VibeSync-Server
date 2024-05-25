@@ -29,13 +29,13 @@ class User {
         data class UnlikePlaylist(val parent: Id, val playlistId: String)
 
         @Resource("/liked-tracks")
-        data class LikedTracks(val parent: Id)
+        data class LikedTracks(val parent: Id, val offset: Int)
 
         @Resource("/liked-albums")
-        data class LikedAlbums(val parent: Id)
+        data class LikedAlbums(val parent: Id, val offset: Int)
 
         @Resource("/playlists")
-        data class Playlists(val parent: Id)
+        data class Playlists(val parent: Id, val offset: Int)
 
         @Resource("/create-playlist")
         data class CreatePlaylist(val parent: Id)
@@ -47,6 +47,6 @@ class User {
         data class UpdatePlaylist(val parent: Id, val playlistId: String)
 
         @Resource("/playlist/{playlistId}/tracks")
-        data class GetPlaylistTracks(val parent: Id, val playlistId: String)
+        data class GetPlaylistTracks(val parent: Id, val playlistId: String, val offset: Int)
     }
 }

@@ -1,7 +1,8 @@
 package io.github.rubenquadros.vibesync.server.test.user.playlist
 
-import io.github.rubenquadros.shared.models.TrackInfo
-import io.github.rubenquadros.vibesync.firestore.model.PlaylistInfo
+import io.github.rubenquadros.vibesync.server.model.GetPaginatedResponse
+import io.github.rubenquadros.vibesync.server.model.PlaylistPage
+import io.github.rubenquadros.vibesync.server.model.TracksPage
 import io.github.rubenquadros.vibesync.server.test.FakeFirestoreApi
 import io.github.rubenquadros.vibesync.server.test.assertFirestoreFailure
 import io.github.rubenquadros.vibesync.server.test.assertSuccess
@@ -38,10 +39,11 @@ class UserPlaylistApiTest {
     fun `when the user playlists are retrieved successfully then a success response is received`() = runTest {
         fakeFirestoreApi.isError = false
 
-        val response = userPlaylistApi.getUserPlaylists("1234")
+        val response = userPlaylistApi.getUserPlaylists("1234", 0)
 
-        response.assertSuccess<List<PlaylistInfo>> {
-            assert(it.isNotEmpty())
+        response.assertSuccess<GetPaginatedResponse> {
+            assert(!it.isNext)
+            assert((it.content as PlaylistPage).items.isNotEmpty())
         }
     }
 
@@ -49,7 +51,7 @@ class UserPlaylistApiTest {
     fun `when there is an error in retrieving the user playlists then an error response is received`() = runTest {
         fakeFirestoreApi.isError = true
 
-        val response = userPlaylistApi.getUserPlaylists("1234")
+        val response = userPlaylistApi.getUserPlaylists("1234", 0)
 
         response.assertFirestoreFailure()
     }
@@ -112,10 +114,11 @@ class UserPlaylistApiTest {
     fun `when user playlist tracks are retrieved successfully then a success response is received`() = runTest {
         fakeFirestoreApi.isError = false
 
-        val response = userPlaylistApi.getUserPlaylistTracks("1234", "6789")
+        val response = userPlaylistApi.getUserPlaylistTracks("1234", "6789", 0)
 
-        response.assertSuccess<List<TrackInfo>> {
-            assert(it.isNotEmpty())
+        response.assertSuccess<GetPaginatedResponse> {
+            assert(!it.isNext)
+            assert((it.content as TracksPage).items.isNotEmpty())
         }
     }
 
@@ -123,7 +126,7 @@ class UserPlaylistApiTest {
     fun `when there is an error in fetching user playlist tracks then an error response is received`() = runTest {
         fakeFirestoreApi.isError = true
 
-        val response = userPlaylistApi.getUserPlaylistTracks("1234", "6789")
+        val response = userPlaylistApi.getUserPlaylistTracks("1234", "6789", 0)
 
         response.assertFirestoreFailure()
     }
