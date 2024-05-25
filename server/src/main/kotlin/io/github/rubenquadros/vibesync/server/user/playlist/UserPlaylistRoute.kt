@@ -20,7 +20,8 @@ fun Route.userPlaylistRoute() {
 
     post<User.Id.CreatePlaylist> { createPlaylist ->
         val body = call.receive<NewPlaylistInfo>()
-        val response = userPlaylistApi.createPlaylist(createPlaylist.parent.id, body.owner, body.playlistName, body.track)
+        val response =
+            userPlaylistApi.createPlaylist(createPlaylist.parent.id, body.owner, body.playlistName, body.track)
 
         if (response.status == HttpStatusCode.OK) {
             call.respond(response.status)
@@ -30,7 +31,7 @@ fun Route.userPlaylistRoute() {
     }
 
     get<User.Id.Playlists> { playlists ->
-        val response = userPlaylistApi.getUserPlaylists(playlists.parent.id)
+        val response = userPlaylistApi.getUserPlaylists(playlists.parent.id, playlists.offset)
 
         call.respond(status = response.status, message = response.data)
     }
@@ -58,7 +59,8 @@ fun Route.userPlaylistRoute() {
 
     delete<User.Id.UpdatePlaylist> { updatePlaylist ->
         val body = call.receive<List<String>>()
-        val response = userPlaylistApi.removeTracksFromPlaylist(updatePlaylist.parent.id, updatePlaylist.playlistId, body)
+        val response =
+            userPlaylistApi.removeTracksFromPlaylist(updatePlaylist.parent.id, updatePlaylist.playlistId, body)
 
         if (response.status == HttpStatusCode.OK) {
             call.respond(response.status)
@@ -68,7 +70,11 @@ fun Route.userPlaylistRoute() {
     }
 
     get<User.Id.GetPlaylistTracks> { getPlaylistTracks ->
-        val response = userPlaylistApi.getUserPlaylistTracks(getPlaylistTracks.parent.id, getPlaylistTracks.playlistId)
+        val response = userPlaylistApi.getUserPlaylistTracks(
+            getPlaylistTracks.parent.id,
+            getPlaylistTracks.playlistId,
+            getPlaylistTracks.offset
+        )
 
         call.respond(status = response.status, message = response.data)
     }

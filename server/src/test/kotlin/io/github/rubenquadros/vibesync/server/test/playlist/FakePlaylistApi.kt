@@ -3,7 +3,7 @@ package io.github.rubenquadros.vibesync.server.test.playlist
 import io.github.rubenquadros.vibesync.kovibes.toImage
 import io.github.rubenquadros.vibesync.kovibes.toTrackInfo
 import io.github.rubenquadros.vibesync.server.model.GetPaginatedResponse
-import io.github.rubenquadros.vibesync.server.model.PlaylistTracks
+import io.github.rubenquadros.vibesync.server.model.TracksPage
 import io.github.rubenquadros.vibesync.server.model.Response
 import io.github.rubenquadros.vibesync.server.playlist.GetPlaylistResponse
 import io.github.rubenquadros.vibesync.server.playlist.PlaylistApi
@@ -27,7 +27,7 @@ class FakePlaylistApi : PlaylistApi, FakeApi() {
         return getTestApiResponse(
             GetPaginatedResponse(
                 isNext = false,
-                content = PlaylistTracks(geTracks().map { it.toTrackInfo() })
+                content = TracksPage(geTracks().map { it.toTrackInfo() })
             )
         )
     }

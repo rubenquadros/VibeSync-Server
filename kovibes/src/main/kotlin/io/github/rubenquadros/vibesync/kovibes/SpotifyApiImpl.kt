@@ -24,7 +24,7 @@ class SpotifyApiImpl : SpotifyApi {
         //init kovibes
         val clientId = System.getenv("CLIENT_ID")
         val clientSecret = System.getenv("CLIENT_SECRET")
-        KoVibesApi.createSpotifyService(clientId, clientSecret)
+        KoVibesApi.createSpotifyService("173791e72eeb42cfb4ed1fd14aebcdcb", "a14101811d6941099bbfb8fdfa363cc2")
     }
 
     override suspend fun getFeaturedPlaylists(): SpotifyApiResponse<Playlists, ErrorBody> {

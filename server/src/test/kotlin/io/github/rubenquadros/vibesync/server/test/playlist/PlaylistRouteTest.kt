@@ -1,7 +1,7 @@
 package io.github.rubenquadros.vibesync.server.test.playlist
 
 import io.github.rubenquadros.vibesync.server.model.GetPaginatedResponse
-import io.github.rubenquadros.vibesync.server.model.PlaylistTracks
+import io.github.rubenquadros.vibesync.server.model.TracksPage
 import io.github.rubenquadros.vibesync.server.playlist.GetPlaylistResponse
 import io.github.rubenquadros.vibesync.server.playlist.PlaylistApi
 import io.github.rubenquadros.vibesync.server.test.assertError
@@ -68,7 +68,7 @@ class PlaylistRouteTest : KoinTest {
 
         with(body) {
             assert(!isNext)
-            assert((content as PlaylistTracks).tracks.isNotEmpty())
+            assert((content as TracksPage).items.isNotEmpty())
         }
     }
 

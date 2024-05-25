@@ -1,7 +1,10 @@
 package io.github.rubenquadros.vibesync.server.test.user.playlist
 
 import io.github.rubenquadros.shared.models.TrackInfo
+import io.github.rubenquadros.vibesync.server.model.GetPaginatedResponse
+import io.github.rubenquadros.vibesync.server.model.PlaylistPage
 import io.github.rubenquadros.vibesync.server.model.Response
+import io.github.rubenquadros.vibesync.server.model.TracksPage
 import io.github.rubenquadros.vibesync.server.test.FakeApi
 import io.github.rubenquadros.vibesync.server.user.playlist.UserPlaylistApi
 import io.github.rubenquadros.vibesync.test.data.tracks
@@ -18,8 +21,13 @@ class FakeUserPlaylistApi : UserPlaylistApi, FakeApi() {
         return getEmptyBodyTestApiResponse()
     }
 
-    override suspend fun getUserPlaylists(userId: String): Response {
-        return getTestApiResponse(userPlaylists)
+    override suspend fun getUserPlaylists(userId: String, offset: Int): Response {
+        return getTestApiResponse(
+            GetPaginatedResponse(
+                isNext = false,
+                content = PlaylistPage(userPlaylists)
+            )
+        )
     }
 
     override suspend fun deletePlaylist(userId: String, playlistId: String): Response {
@@ -38,7 +46,12 @@ class FakeUserPlaylistApi : UserPlaylistApi, FakeApi() {
         return getEmptyBodyTestApiResponse()
     }
 
-    override suspend fun getUserPlaylistTracks(userId: String, playlistId: String): Response {
-        return getTestApiResponse(tracks)
+    override suspend fun getUserPlaylistTracks(userId: String, playlistId: String, offset: Int): Response {
+        return getTestApiResponse(
+            GetPaginatedResponse(
+                isNext = false,
+                content = TracksPage(tracks)
+            )
+        )
     }
 }

@@ -1,10 +1,10 @@
 package io.github.rubenquadros.vibesync.server.test.search
 
 import io.github.rubenquadros.vibesync.server.model.GetPaginatedResponse
+import io.github.rubenquadros.vibesync.server.model.TracksPage
 import io.github.rubenquadros.vibesync.server.model.SearchAlbums
 import io.github.rubenquadros.vibesync.server.model.SearchArtists
 import io.github.rubenquadros.vibesync.server.model.SearchPlaylists
-import io.github.rubenquadros.vibesync.server.model.SearchTracks
 import io.github.rubenquadros.vibesync.server.search.SearchApi
 import io.github.rubenquadros.vibesync.server.test.assertError
 import io.github.rubenquadros.vibesync.server.test.assertOk
@@ -43,7 +43,7 @@ class SearchRouteTest : KoinTest {
 
         with(body) {
             assert(isNext)
-            assert((content as SearchTracks).tracks.isNotEmpty())
+            assert((content as TracksPage).items.isNotEmpty())
         }
     }
 

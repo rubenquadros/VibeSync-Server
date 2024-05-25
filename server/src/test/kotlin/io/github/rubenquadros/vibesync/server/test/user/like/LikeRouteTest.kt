@@ -1,7 +1,8 @@
 package io.github.rubenquadros.vibesync.server.test.user.like
 
-import io.github.rubenquadros.shared.models.MediaInfo
-import io.github.rubenquadros.shared.models.TrackInfo
+import io.github.rubenquadros.vibesync.server.model.GetPaginatedResponse
+import io.github.rubenquadros.vibesync.server.model.MediaPage
+import io.github.rubenquadros.vibesync.server.model.TracksPage
 import io.github.rubenquadros.vibesync.server.test.assertError
 import io.github.rubenquadros.vibesync.server.test.assertOk
 import io.github.rubenquadros.vibesync.server.test.cleanupKoin
@@ -109,20 +110,23 @@ class LikeRouteTest {
     fun `when user liked tracks are fetched successfully then a success response is received`() = testApplication {
         fakeLikeApi.isError = false
 
-        val response = it.get("user/1234/liked-tracks")
+        val response = it.get("user/1234/liked-tracks?offset=0")
 
         response.assertOk()
 
-        val body = response.body<List<TrackInfo>>()
+        val body = response.body<GetPaginatedResponse>()
 
-        assert(body.size == 1)
+        with(body) {
+            assert(!isNext)
+            assert((content as TracksPage).items.size == 1)
+        }
     }
 
     @Test
     fun `when there is an error in fetching user liked tracks then an error response is received`() = testApplication {
         fakeLikeApi.isError = true
 
-        val response = it.get("user/1234/liked-tracks")
+        val response = it.get("user/1234/liked-tracks?offset=0")
 
         response.assertError()
     }
@@ -131,20 +135,23 @@ class LikeRouteTest {
     fun `when user liked albums are fetched successfully then a success response is received`() = testApplication {
         fakeLikeApi.isError = false
 
-        val response = it.get("user/1234/liked-albums")
+        val response = it.get("user/1234/liked-albums?offset=0")
 
         response.assertOk()
 
-        val body = response.body<List<MediaInfo>>()
+        val body = response.body<GetPaginatedResponse>()
 
-        assert(body.size == 1)
+        with(body) {
+            assert(!isNext)
+            assert((content as MediaPage).items.size == 1)
+        }
     }
 
     @Test
     fun `when there is an error in fetching user liked albums then an error response is received`() = testApplication {
         fakeLikeApi.isError = true
 
-        val response = it.get("user/1234/liked-albums")
+        val response = it.get("user/1234/liked-albums?offset=0")
 
         response.assertError()
     }
