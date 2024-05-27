@@ -47,14 +47,14 @@ class FirestoreApiImpl : FirestoreApi {
 
     override suspend fun getTopArtists(): FirestoreApiResponse<List<TopEntity>> {
         return getFirestoreResponse {
-            val future = firestore.collection("top_artists").get()
-            val topArtists = future.get().documents.map { queryDocumentSnapshot: QueryDocumentSnapshot ->
-                TopEntity(
-                    id = queryDocumentSnapshot["id"].toString(),
-                    name = queryDocumentSnapshot["name"].toString(),
-                    image = queryDocumentSnapshot["image"].toString()
-                )
-            }
+            val topArtists =
+                firestore.collection("top_artists").await().map { queryDocumentSnapshot: QueryDocumentSnapshot ->
+                    TopEntity(
+                        id = queryDocumentSnapshot["id"].toString(),
+                        name = queryDocumentSnapshot["name"].toString(),
+                        image = queryDocumentSnapshot["image"].toString()
+                    )
+                }
 
             getSuccessResponse(topArtists)
         }
@@ -62,14 +62,14 @@ class FirestoreApiImpl : FirestoreApi {
 
     override suspend fun getTopTracks(): FirestoreApiResponse<List<TopEntity>> {
         return getFirestoreResponse {
-            val future = firestore.collection("top_tracks").get()
-            val topTracks = future.get().documents.map { queryDocumentSnapshot: QueryDocumentSnapshot ->
-                TopEntity(
-                    id = queryDocumentSnapshot["id"].toString(),
-                    name = queryDocumentSnapshot["name"].toString(),
-                    image = queryDocumentSnapshot["image"].toString()
-                )
-            }
+            val topTracks =
+                firestore.collection("top_tracks").await().map { queryDocumentSnapshot: QueryDocumentSnapshot ->
+                    TopEntity(
+                        id = queryDocumentSnapshot["id"].toString(),
+                        name = queryDocumentSnapshot["name"].toString(),
+                        image = queryDocumentSnapshot["image"].toString()
+                    )
+                }
 
             getSuccessResponse(topTracks)
         }
@@ -77,14 +77,14 @@ class FirestoreApiImpl : FirestoreApi {
 
     override suspend fun getTopAlbums(): FirestoreApiResponse<List<TopEntity>> {
         return getFirestoreResponse {
-            val future = firestore.collection("top_albums").get()
-            val topAlbums = future.get().documents.map { queryDocumentSnapshot: QueryDocumentSnapshot ->
-                TopEntity(
-                    id = queryDocumentSnapshot["id"].toString(),
-                    name = queryDocumentSnapshot["name"].toString(),
-                    image = queryDocumentSnapshot["image"].toString()
-                )
-            }
+            val topAlbums =
+                firestore.collection("top_albums").await().map { queryDocumentSnapshot: QueryDocumentSnapshot ->
+                    TopEntity(
+                        id = queryDocumentSnapshot["id"].toString(),
+                        name = queryDocumentSnapshot["name"].toString(),
+                        image = queryDocumentSnapshot["image"].toString()
+                    )
+                }
 
             getSuccessResponse(topAlbums)
         }
@@ -92,14 +92,14 @@ class FirestoreApiImpl : FirestoreApi {
 
     override suspend fun getRecentTracks(): FirestoreApiResponse<List<TopEntity>> {
         return getFirestoreResponse {
-            val future = firestore.collection("recent_tracks").get()
-            val recentTracks = future.get().documents.map { queryDocumentSnapshot: QueryDocumentSnapshot ->
-                TopEntity(
-                    id = queryDocumentSnapshot["id"].toString(),
-                    name = queryDocumentSnapshot["name"].toString(),
-                    image = queryDocumentSnapshot["image"].toString()
-                )
-            }
+            val recentTracks =
+                firestore.collection("recent_tracks").await().map { queryDocumentSnapshot: QueryDocumentSnapshot ->
+                    TopEntity(
+                        id = queryDocumentSnapshot["id"].toString(),
+                        name = queryDocumentSnapshot["name"].toString(),
+                        image = queryDocumentSnapshot["image"].toString()
+                    )
+                }
 
             getSuccessResponse(recentTracks)
         }
@@ -107,8 +107,7 @@ class FirestoreApiImpl : FirestoreApi {
 
     override suspend fun getUserProfile(id: String): FirestoreApiResponse<UserProfile> {
         return getFirestoreResponse {
-            val future = firestore.collection("users").document(id).get()
-            future.get().data?.let {
+            firestore.collection("users").document(id).await()?.let {
                 getSuccessResponse(
                     UserProfile(
                         id = it["id"].toString(),
@@ -191,10 +190,10 @@ class FirestoreApiImpl : FirestoreApi {
 
     override suspend fun getLikedTracks(userId: String): FirestoreApiResponse<List<TrackInfo>> {
         return getFirestoreResponse {
-            val future = firestore.collection("users").document(userId).collection("liked_tracks")
-                .orderBy("timestamp", Query.Direction.DESCENDING).limit(10).get()
+            val query = firestore.collection("users").document(userId).collection("liked_tracks")
+                .orderBy("timestamp", Query.Direction.DESCENDING).limit(10)
 
-            val likedTracks = future.get().documents.map { queryDocumentSnapshot: QueryDocumentSnapshot ->
+            val likedTracks = query.await().map { queryDocumentSnapshot: QueryDocumentSnapshot ->
                 val data = queryDocumentSnapshot.getDataMap()
                 TrackInfo(
                     id = data["id"].toString(),
@@ -240,10 +239,10 @@ class FirestoreApiImpl : FirestoreApi {
 
     override suspend fun getLikedAlbums(userId: String): FirestoreApiResponse<List<MediaInfo>> {
         return getFirestoreResponse {
-            val future = firestore.collection("users").document(userId).collection("liked_albums")
-                .orderBy("timestamp", Query.Direction.DESCENDING).limit(10).get()
+            val query = firestore.collection("users").document(userId).collection("liked_albums")
+                .orderBy("timestamp", Query.Direction.DESCENDING).limit(10)
 
-            val likedAlbums = future.get().documents.map { queryDocumentSnapshot: QueryDocumentSnapshot ->
+            val likedAlbums = query.await().map { queryDocumentSnapshot: QueryDocumentSnapshot ->
                 val data = queryDocumentSnapshot.getDataMap()
                 MediaInfo(
                     id = data["id"].toString(),
@@ -313,10 +312,10 @@ class FirestoreApiImpl : FirestoreApi {
 
     override suspend fun getUserPlaylists(userId: String): FirestoreApiResponse<List<PlaylistInfo>> {
         return getFirestoreResponse {
-            val future = firestore.collection("users").document(userId).collection("playlists")
-                .orderBy("updatedAt", Query.Direction.DESCENDING).limit(10).get()
+            val query = firestore.collection("users").document(userId).collection("playlists")
+                .orderBy("updatedAt", Query.Direction.DESCENDING).limit(10)
 
-            val playlists = future.get().documents.map { queryDocumentSnapshot: QueryDocumentSnapshot ->
+            val playlists = query.await().map { queryDocumentSnapshot: QueryDocumentSnapshot ->
                 val data = queryDocumentSnapshot.getDataMap()
                 PlaylistInfo(
                     id = data["id"].toString(),
@@ -407,7 +406,11 @@ class FirestoreApiImpl : FirestoreApi {
         }
     }
 
-    override suspend fun getPlaylistTracks(userId: String, playlistId: String, offset: Int): FirestoreApiResponse<TracksPaginatedResponse> {
+    override suspend fun getPlaylistTracks(
+        userId: String,
+        playlistId: String,
+        offset: Int
+    ): FirestoreApiResponse<TracksPaginatedResponse> {
         return getFirestoreResponse {
             val query = firestore.collection("playlists").document(playlistId).collection("tracks")
 

@@ -10,7 +10,7 @@ class Pager {
         private const val PAGE_SIZE = 20
     }
 
-    fun getPage(offset: Int, query: Query): PageResponse {
+    suspend fun getPage(offset: Int, query: Query): PageResponse {
         var lastDocument: DocumentSnapshot? = null
         val totalDocumentsToSkip = offset * PAGE_SIZE
 
@@ -24,9 +24,9 @@ class Pager {
                     query.limit(PAGE_SIZE)
                 }
 
-                val snapshot = q.get().get()
-                if (snapshot.documents.isEmpty()) return PageResponse()
-                lastDocument = snapshot.documents.lastOrNull()
+                val queryDocumentSnapshot = q.await()
+                if (queryDocumentSnapshot.isEmpty()) return PageResponse()
+                lastDocument = queryDocumentSnapshot.lastOrNull()
             }
         }
 
@@ -36,10 +36,10 @@ class Pager {
             query.limit(PAGE_SIZE + 1)
         }
 
-        val querySnapshot = finalQuery.get().get()
+        val querySnapshot = finalQuery.await()
         return PageResponse(
-            isNext = querySnapshot.size() > PAGE_SIZE,
-            page = querySnapshot.documents.take(PAGE_SIZE)
+            isNext = querySnapshot.size > PAGE_SIZE,
+            page = querySnapshot.take(PAGE_SIZE)
         )
     }
 
