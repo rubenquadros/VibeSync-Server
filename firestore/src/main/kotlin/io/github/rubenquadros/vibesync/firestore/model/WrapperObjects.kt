@@ -6,7 +6,8 @@ import java.util.Date
 data class WriteWrapper(
     val data: Any,
     @ServerTimestamp
-    val timestamp: Date? = null
+    val timestamp: Date? = null,
+    val status: String = "Y"
 )
 
 data class UpdateWrapper(
@@ -14,7 +15,8 @@ data class UpdateWrapper(
     @ServerTimestamp
     val createdAt: Date? = null,
     @ServerTimestamp
-    val updatedAt: Date? = null
+    val updatedAt: Date? = null,
+    val status: String = "Y"
 )
 
 fun Any.toWriteObject(): WriteWrapper = WriteWrapper(this)
