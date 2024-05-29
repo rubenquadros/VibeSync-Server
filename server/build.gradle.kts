@@ -33,7 +33,6 @@ dependencies {
     testImplementation(libs.koin.test)
     testImplementation(libs.kotlin.test)
     testImplementation(libs.coroutines.test)
-    testImplementation(libs.mockk)
 }
 
 ksp {
