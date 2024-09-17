@@ -26,7 +26,7 @@ interface LikeApi {
 }
 
 @Single
-class LikeApiImpl(private val firestoreApi: FirestoreApi) : LikeApi {
+internal class LikeApiImpl(private val firestoreApi: FirestoreApi) : LikeApi {
     override suspend fun likeTrack(userId: String, trackInfo: TrackInfo): Response {
         val response = firestoreApi.likeTrack(userId, trackInfo)
 

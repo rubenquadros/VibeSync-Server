@@ -21,7 +21,7 @@ interface ArtistApi {
 }
 
 @Single
-class ArtistApiImpl(private val spotifyApi: SpotifyApi) : ArtistApi {
+internal class ArtistApiImpl(private val spotifyApi: SpotifyApi) : ArtistApi {
 
     override suspend fun getArtist(id: String): Response {
         val spotifyResponse = withContext(Dispatchers.IO) {

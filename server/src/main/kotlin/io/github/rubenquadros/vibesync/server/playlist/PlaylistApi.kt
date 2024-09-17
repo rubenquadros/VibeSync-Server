@@ -19,7 +19,7 @@ interface PlaylistApi {
 }
 
 @Single
-class PlaylistApiImpl(private val spotifyApi: SpotifyApi) : PlaylistApi {
+internal class PlaylistApiImpl(private val spotifyApi: SpotifyApi) : PlaylistApi {
     override suspend fun getPlaylist(id: String): Response {
         val spotifyResponse = withContext(Dispatchers.IO) {
             spotifyApi.getPlaylist(id)

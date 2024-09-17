@@ -19,7 +19,7 @@ interface ProfileApi {
 }
 
 @Single
-class ProfileApiImpl(private val firestoreApi: FirestoreApi) : ProfileApi {
+internal class ProfileApiImpl(private val firestoreApi: FirestoreApi) : ProfileApi {
     @Suppress("UNCHECKED_CAST")
     override suspend fun getUserProfile(id: String): Response {
         val response = withContext(Dispatchers.IO) {
