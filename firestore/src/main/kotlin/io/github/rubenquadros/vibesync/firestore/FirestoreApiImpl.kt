@@ -28,7 +28,7 @@ import java.io.FileInputStream
 import java.util.UUID
 
 @Single
-class FirestoreApiImpl : FirestoreApi {
+internal class FirestoreApiImpl : FirestoreApi {
 
     private val pager: Pager by lazy { Pager() }
 

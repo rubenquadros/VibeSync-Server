@@ -19,7 +19,7 @@ interface AlbumApi {
 }
 
 @Single
-class AlbumApiImpl(private val spotifyApi: SpotifyApi) : AlbumApi {
+internal class AlbumApiImpl(private val spotifyApi: SpotifyApi) : AlbumApi {
     override suspend fun getAlbum(id: String): Response {
         val spotifyResponse = withContext(Dispatchers.IO) {
             spotifyApi.getAlbum(id)

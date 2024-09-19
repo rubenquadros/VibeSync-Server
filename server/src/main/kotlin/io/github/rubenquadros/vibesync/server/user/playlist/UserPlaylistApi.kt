@@ -27,7 +27,7 @@ interface UserPlaylistApi {
 }
 
 @Single
-class UserPlaylistApiImpl(private val firestoreApi: FirestoreApi) : UserPlaylistApi {
+internal class UserPlaylistApiImpl(private val firestoreApi: FirestoreApi) : UserPlaylistApi {
     override suspend fun createPlaylist(userId: String, userName: String, playlistName: String, trackInfo: TrackInfo): Response {
         val response = firestoreApi.createPlaylist(userId, userName, playlistName, trackInfo)
 

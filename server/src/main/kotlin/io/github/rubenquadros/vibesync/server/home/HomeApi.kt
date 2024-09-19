@@ -22,7 +22,7 @@ interface HomeApi {
 }
 
 @Single
-class HomeApiImpl(
+internal class HomeApiImpl(
     private val firestoreApi: FirestoreApi,
     private val spotifyApi: SpotifyApi
 ) : HomeApi {

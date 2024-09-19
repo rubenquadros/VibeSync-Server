@@ -16,7 +16,7 @@ interface UnlikeApi {
 }
 
 @Single
-class UnlikeApiImpl(private val firestoreApi: FirestoreApi) : UnlikeApi {
+internal class UnlikeApiImpl(private val firestoreApi: FirestoreApi) : UnlikeApi {
     override suspend fun unlikeTrack(userId: String, trackId: String): Response {
         val response = firestoreApi.unlikeTrack(userId, trackId)
 

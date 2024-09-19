@@ -26,7 +26,7 @@ interface SearchApi {
 }
 
 @Single
-class SearchApiImpl(private val spotifyApi: SpotifyApi) : SearchApi {
+internal class SearchApiImpl(private val spotifyApi: SpotifyApi) : SearchApi {
     override suspend fun searchTrack(query: String, offset: Int, limit: Int): Response {
         val spotifyResponse = withContext(Dispatchers.IO) {
             spotifyApi.searchTrack(query, offset, limit)
